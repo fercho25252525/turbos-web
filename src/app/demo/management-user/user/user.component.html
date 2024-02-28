@@ -1,0 +1,40 @@
+<div class="card">
+   <div class="m-4">
+    <p-button class="float-end" [rounded]="true" label="Crear Usuario" [raised]="true" severity="secondary"></p-button>   
+    </div>
+   <div class="card ml-4">
+    <p-table
+    [value]="customers"
+    styleClass="p-datatable-striped"
+    [paginator]="true"
+    [rows]="8"
+    [showCurrentPageReport]="true"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    currentPageReportTemplate="{first} de {last} de {totalRecords} registros"
+    [rowsPerPageOptions]="[8, 10, 20, 30]">
+    <ng-template pTemplate="header" class="bg-dark">
+        <tr>
+            <th>Usuario</th>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Documento</th>
+            <th>Fecha Creación</th>
+            <th>Acciones</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-customer>
+        <tr>
+            <td style="font-size: 13px">{{ customer.name }}</td>
+            <td>{{ customer.country.name }}</td>
+            <td>{{ customer.company }}</td>
+            <td>{{ customer.representative.name }}</td>
+            <td>{{ customer.representative.name }}</td>
+            <td>
+                <i class="m-2 feather icon-edit"></i> 
+                <i class="m-1 feather icon-trash-2"></i>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+   </div>
+</div>

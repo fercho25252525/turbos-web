@@ -11,15 +11,16 @@
             </div>
             <ul class="breadcrumb">
               <li class="breadcrumb-item">
-                <a [routerLink]="['/dashboard/analytics/']" title="Home"><i class="feather icon-home"></i></a>
+                <a [routerLink]="['/analytics/']" title="Home"><i style="color: rgb(69, 85, 153);" class="feather icon-home"></i></a>
               </li>
               <ng-container *ngFor="let breadcrumb of navigationList">
                 <li class="breadcrumb-item" *ngIf="breadcrumb.url !== false"
-                  ><a [routerLink]="breadcrumb.url">{{ breadcrumb.title }}</a></li
-                >
+                  ><a style="color: rgb(69, 85, 153);">{{ breadcrumb.title }}</a>
+                </li>
+
                 <li class="breadcrumb-item" *ngIf="breadcrumb.url === false"
-                  ><a href="javascript:">{{ breadcrumb.title }}</a></li
-                >
+                  ><a style="color: rgb(69, 85, 153);">{{ breadcrumb.title }}</a>
+                </li>
               </ng-container>
             </ul>
           </div>
@@ -28,3 +29,4 @@
     </div>
   </ng-container>
 </ng-container>
+

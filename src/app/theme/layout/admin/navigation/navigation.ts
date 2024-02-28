@@ -27,7 +27,7 @@ export const NavigationItems: NavigationItem[] = [
         id: 'usuario',
         title: 'Usuario',
         type: 'item',
-        url: '/analytics2',
+        url: '/user',
         icon: 'feather icon-user'
       }, {
         id: 'cliente',

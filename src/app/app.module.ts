@@ -25,6 +25,9 @@ import { NavItemComponent } from './theme/layout/admin/navigation/nav-content/na
 import { SharedModule } from './theme/shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { TableModule } from 'primeng/table';
+import UserComponent from './demo/management-user/user/user.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +47,7 @@ import { ButtonModule } from 'primeng/button';
     NavItemComponent,
     NavCollapseComponent,
     NavGroupComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule, 
@@ -54,7 +58,9 @@ import { ButtonModule } from 'primeng/button';
     ReactiveFormsModule, 
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    ButtonModule
+    ButtonModule,
+    CardModule,
+    TableModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -33,7 +33,7 @@ export type ChartOptions = {
   stroke: ApexStroke;
   dataLabels: ApexDataLabels;
   plotOptions: ApexPlotOptions;
-  yaxis: ApexYAxis;
+  yaxis: ApexYAxis; 
   tooltip: ApexTooltip;
   labels: string[];
   colors: string[];

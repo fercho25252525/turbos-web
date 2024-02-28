@@ -6,6 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AdminComponent } from './theme/layout/admin/admin.component';
 import { GuestComponent } from './theme/layout/guest/guest.component';
 import SignInComponent from './demo/authentication/sign-in/sign-in.component';
+import UserComponent from './demo/management-user/user/user.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,11 @@ const routes: Routes = [
       {
         path: 'analytics',
         loadComponent: () => import('./demo/dashboard/dash-analytics/dash-analytics.component')
+      },
+      {
+        path: 'user',
+        // loadComponent: () => import('./demo/management-user/user/user.component')
+        component: UserComponent
       },
       {
         path: 'component',
