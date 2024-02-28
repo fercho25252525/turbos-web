@@ -1,0 +1,70 @@
+
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+
+// Theme Font
+@import 'scss/themes/font/theme-font';
+
+// main framework
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+@import 'scss/settings/custom-variables';
+@import 'scss/settings/theme-variables';
+
+// bootstrap
+@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap/scss/mixins';
+@import 'node_modules/bootstrap/scss/utilities';
+@import 'node_modules/bootstrap/scss/utilities/api';
+@import '../node_modules/bootstrap/dist/css/bootstrap.css';
+@import 'scss/themes/general';
+@import 'scss/themes/generic';
+@import 'scss/themes/minixs/function';
+
+// icon
+@import 'scss/themes/font/datta-icon';
+@import 'scss/themes/font/feather';
+@import 'scss/themes/font/fontawesome';
+@import 'scss/themes/font/flaticon';
+
+// component
+@import 'scss/themes/component/component';
+
+// theme layouts
+@import 'scss/themes/layouts/menu-lite';
+@import 'scss/themes/layouts/menu-ng';
+
+// dashboard
+@import 'scss/themes/pages/dashboard.scss';
+@import 'scss/themes/pages/authentication';
+
+@import 'scss/themes/chat/chat';
+
+// custom
+@import 'scss/themes/custom';
+
+
+.text-error{
+  color: rgb(172, 7, 7) !important;
+  font-size: 0.7rem;
+}
+
+.bg-navbar {
+  color: rgb(253, 253, 253) !important;
+  background: linear-gradient(100deg, rgb(32, 41, 75), lighten( rgb(128, 142, 192), 15%));
+}
+
+.bg-navigation {
+  color: rgb(253, 253, 253) !important;
+  background: linear-gradient(150deg, rgb(32, 41, 75), lighten( rgb(99, 111, 155), 15%));
+}
+
+.button-principal{
+  color: rgb(253, 253, 253) !important;
+  background: linear-gradient(5deg, rgb(32, 41, 75), lighten( rgb(165, 158, 158), 20%));
+}
+
+.custom-checkbox:checked + label::before {
+  background-color: rgba(33,48,89,255) !important; /* Cambia el color de fondo del checkbox cuando está marcado a negro */
+  border-color: rgba(33,48,89,255) !important; /* Cambia el color del borde del checkbox a negro */
+}

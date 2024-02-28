@@ -1,0 +1,41 @@
+<div class="auth-wrapper">
+  <div class="auth-content">
+    <div class="card">
+      <div class="row align-items-center text-center">
+        <div class="col-md-12">
+          <div class="card-body">
+            <img src="assets/images/logo_tecni.png" alt="logo" class="img-fluid mb-2" />
+            <h4 class="mb-3 f-w-400">{{ titleLogin }}</h4>
+            <form [formGroup]="formLogin">
+              <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1"><i class="feather icon-user"></i></span>
+                <input formControlName="userForm" [(ngModel)]="user.username" type="email" class="form-control" placeholder="Usuario" aria-label="Username" aria-describedby="basic-addon1" />
+              </div>
+              <div class="input-group mb-4">
+                <span class="input-group-text" id="basic-addon3"><i class="feather icon-lock"></i></span>
+                <input formControlName="passwordForm" [(ngModel)]="user.password" type="password" class="form-control" placeholder="Contraseña" aria-label="Username" aria-describedby="basic-addon3" />
+              </div>
+              <div class="form-group text-start mt-2">
+                <div class="checkbox checkbox-dark d-inline">
+                  <input class="custom-checkbox" type="checkbox" name="checkbox-fill-1" id="checkbox-fill-a1" checked="">
+                  <label for="checkbox-fill-a1" class="cr">Guardar contraseña</label>
+                </div>
+              </div>
+              <div class="mb-2" *ngIf="userAndPasswordRequired">
+                <a class="text-error">Campos obligatorios.</a>
+              </div>
+              <div class="mb-2" *ngIf="errorCredential">
+                <a class="text-error">Credenciales incorrectas, intentelo de nuevo.</a>
+              </div>
+              <div class="d-grid">
+                <input class="btn btn-block button-principal mb-4" [disabled]="formLogin.invalid" (click)="login()" [value]="titleLogin">
+              </div>
+            </form>
+            <p class="mb-2 text-muted">¿Has olvidado tu contraseña? <a href="javascriprt:" class="f-w-400">Restablecer</a></p>
+            <!-- <p class="mb-0 text-muted">¿No tienes una cuenta? <a [routerLink]="['/auth/signup']" class="f-w-400">Registrate</a></p> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

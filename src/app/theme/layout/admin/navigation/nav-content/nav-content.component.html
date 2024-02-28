@@ -1,0 +1,13 @@
+<ng-scrollbar (clickOutside)="navMob()" style="height: calc(100vh - 56px)">
+  <div class="navbar-content"> 
+    <ul class="nav pcoded-inner-navbar" (clickOutside)="fireOutClick()">
+      <ng-container *ngFor="let item of navigations">
+        <app-nav-group *ngIf="item.type === 'group'" [item]="item"></app-nav-group>
+      </ng-container>
+    </ul>
+   
+  </div>
+  <div class="version">
+    <a disabled class="pe-auto text-white">V{{ currentApplicationVersion }}</a>
+  </div>
+</ng-scrollbar>
