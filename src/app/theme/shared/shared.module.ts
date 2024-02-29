@@ -19,6 +19,7 @@ import 'mousetrap';
 import { NgbDropdownModule, NgbNavModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   imports: [
@@ -46,8 +47,9 @@ import { CardModule } from 'primeng/card';
     NgbNavModule,
     NgScrollbarModule,
     NgClickOutsideDirective,
-    ButtonModule,
-    CardModule
+    // ButtonModule,
+    // CardModule,
+    // DialogModule
   ],
   declarations: [DataFilterPipe, SpinnerComponent]
 })

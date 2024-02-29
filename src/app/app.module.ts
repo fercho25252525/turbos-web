@@ -27,6 +27,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
+import { DialogModule } from 'primeng/dialog';
 import UserComponent from './demo/management-user/user/user.component';
 
 @NgModule({
@@ -60,7 +61,8 @@ import UserComponent from './demo/management-user/user/user.component';
     ReactiveFormsModule,
     ButtonModule,
     CardModule,
-    TableModule
+    TableModule,
+    DialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]

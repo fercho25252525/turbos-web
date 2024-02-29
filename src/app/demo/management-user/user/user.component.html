@@ -1,40 +1,141 @@
 <div class="card">
-   <div class="m-4">
-    <p-button class="float-end" [rounded]="true" label="Crear Usuario" [raised]="true" severity="secondary"></p-button>   
+    <div class="m-4">
+        <p-button class="float-end" [rounded]="true" label="Crear Usuario" [raised]="true" severity="secondary"
+            (click)="showDialog()"></p-button>
     </div>
-   <div class="card ml-4">
-    <p-table
-    [value]="customers"
-    styleClass="p-datatable-striped"
-    [paginator]="true"
-    [rows]="8"
-    [showCurrentPageReport]="true"
-    [tableStyle]="{ 'min-width': '50rem' }"
-    currentPageReportTemplate="{first} de {last} de {totalRecords} registros"
-    [rowsPerPageOptions]="[8, 10, 20, 30]">
-    <ng-template pTemplate="header" class="bg-dark">
-        <tr>
-            <th>Usuario</th>
-            <th>Nombre</th>
-            <th>Correo</th>
-            <th>Documento</th>
-            <th>Fecha Creación</th>
-            <th>Acciones</th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-customer>
-        <tr>
-            <td style="font-size: 13px">{{ customer.name }}</td>
-            <td>{{ customer.country.name }}</td>
-            <td>{{ customer.company }}</td>
-            <td>{{ customer.representative.name }}</td>
-            <td>{{ customer.representative.name }}</td>
-            <td>
-                <i class="m-2 feather icon-edit"></i> 
-                <i class="m-1 feather icon-trash-2"></i>
-            </td>
-        </tr>
-    </ng-template>
-</p-table>
-   </div>
+    <div class="card m-4">
+        <p-table [value]="customers" styleClass="p-datatable-striped" [paginator]="true" [rows]="8"
+            [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
+            currentPageReportTemplate="{first} de {last} de {totalRecords} registros"
+            [rowsPerPageOptions]="[8, 10, 20, 30]">
+            <ng-template pTemplate="header" class="bg-dark">
+                <tr>
+                    <th>Usuario</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Documento</th>
+                    <th>Fecha Creación</th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-customer>
+                <tr>
+                    <td style="font-size: 13px">{{ customer.name }}</td>
+                    <td>{{ customer.country.name }}</td>
+                    <td>{{ customer.company }}</td>
+                    <td>{{ customer.representative.name }}</td>
+                    <td>{{ customer.representative.name }}</td>
+                    <td>
+                        <i class="m-2 feather icon-edit"></i>
+                        <i class="m-1 feather icon-trash-2"></i>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
 </div>
+
+
+
+<p-dialog header="Crear Usuario" [(visible)]="visible" [style]="{width: '45vw'}">
+    <form [formGroup]="formCreateUser" (ngSubmit)="enviarFormulario()">
+
+        <div class="container row">
+            <div class="col-md-4 mb-3">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Nombre</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="name" class="form-control" id="inputPassword">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Apellido</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="lastName" class="form-control" id="inputPassword">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Usuario</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="username" class="form-control" id="inputPassword">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Correo</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="email" class="form-control" id="inputPassword">
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Género</label>
+                <div class="col-sm-12">
+                    <select class="form-select" formControlName="gender" aria-label="Default select example">
+                        <option selected>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Contraseña</label>
+                <div class="col-sm-12">
+                    <input type="password" formControlName="password" class="form-control" id="inputPassword">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Confirmar Contraseña</label>
+                <div class="col-sm-12">
+                    <input type="password" formControlName="confirmPassword" class="form-control" id="inputPassword">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Número Documento</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="document" class="form-control" id="inputPassword">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Fecha Nacimiento</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="birthDate" class="form-control" id="inputPassword">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Rol</label>
+                <div class="col-sm-12">
+                    <select class="form-select" formControlName="role">
+                        <option selected>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <div>
+            <label for="correo">Correo:</label>
+            <input type="email" id="correo" formControlName="correo">
+            <div *ngIf="formulario.get('correo')!.hasError('required')">
+                Correo es obligatorio.
+            </div>
+            <div *ngIf="formulario.get('correo')!.hasError('email')">
+                Ingresa un correo válido.
+            </div>
+        </div> -->
+
+
+
+        <div class="border-top">
+            <div class="m-3">
+                <p-button class="float-end mx-4" [rounded]="true" label="Guardar" severity="secondary"
+                [disabled]="formCreateUser.invalid" size="small"></p-button>
+
+                <p-button class="float-end" (Click)="closeDialog()" label="Cancelar" severity="secondary" size="small"></p-button>
+            </div>          
+        </div>
+
+    </form>
+</p-dialog>
