@@ -28,6 +28,12 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
+import { PasswordModule } from 'primeng/password';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { MessagesModule } from 'primeng/messages';
+import { SelectButtonModule } from 'primeng/selectbutton';
+
 import UserComponent from './demo/management-user/user/user.component';
 
 @NgModule({
@@ -62,9 +68,13 @@ import UserComponent from './demo/management-user/user/user.component';
     ButtonModule,
     CardModule,
     TableModule,
-    DialogModule
+    DialogModule,
+    PasswordModule,
+    ToastModule,
+    MessagesModule,
+    SelectButtonModule  
   ],
-  providers: [],
+  providers: [MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

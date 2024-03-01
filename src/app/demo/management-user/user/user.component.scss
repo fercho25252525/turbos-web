@@ -10,7 +10,7 @@ tr {
 }
 
 i {
-    font-size: 15px;
+    font-size: 18px;
     color: rgb(69, 85, 153);
 }
 
@@ -33,4 +33,30 @@ select {
 
 label {
     font-size: 0.8rem;
+}
+
+.button-calendar {
+    background-color: #f7f7f7;
+    border-color: #cecbcb;
+}
+
+
+.p-message .p-message-wrapper {
+    padding: 0.1rem 0.1rem!important;
+}
+
+
+
+
+
+.custom-active-button {
+    background-color: #b8c8d3; /* Cambia esto al color que desees */
+    background:  #b8c8d3;
+    color: #ffffff; /* Cambia esto al color de texto que desees */
+  }
+
+  .p-selectbutton .p-button.p-highlight {
+    background: #b6bfcd;
+    border-color: #859abb;
+    color: #ffffff;
 }

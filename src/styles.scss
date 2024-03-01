@@ -44,6 +44,12 @@
 @import 'scss/themes/custom';
 
 
+.p-selectbutton .p-button.p-highlight {
+  background: #c3cbd8;
+  border-color: #859abb;
+  color: #ffffff;
+}
+
 .text-error{
   color: rgb(172, 7, 7) !important;
   font-size: 0.7rem;
