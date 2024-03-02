@@ -33,6 +33,8 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmationService } from 'primeng/api';
 
 import UserComponent from './demo/management-user/user/user.component';
 
@@ -72,9 +74,10 @@ import UserComponent from './demo/management-user/user/user.component';
     PasswordModule,
     ToastModule,
     MessagesModule,
-    SelectButtonModule  
+    SelectButtonModule,
+    ConfirmPopupModule
   ],
-  providers: [MessageService],
+  providers: [MessageService,ConfirmationService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

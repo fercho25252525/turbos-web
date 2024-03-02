@@ -1,33 +1,42 @@
 <div class="card">
-    <div class="m-4">
+    <p-toast></p-toast>
+    <div class="mx-4 my-3">
         <p-button class="float-end" [rounded]="true" label="Crear Usuario" [raised]="true" severity="secondary"
             (click)="showDialogCreate()"></p-button>
     </div>
-    <div class="card m-4">
-        <p-table [value]="customers" styleClass="p-datatable-striped" [paginator]="true" [rows]="8"
+    <div class="card mx-4">
+        <p-table [value]="users" styleClass="p-datatable-striped" [paginator]="true" [rows]="8"
             [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
             currentPageReportTemplate="{first} de {last} de {totalRecords} registros"
-            [rowsPerPageOptions]="[8, 10, 20, 30]">
+            [rowsPerPageOptions]="[5, 8, 10, 20, 30]"
+            [loading]="loadingTableData">
             <ng-template pTemplate="header" class="bg-dark">
                 <tr>
                     <th>Usuario</th>
                     <th>Nombre</th>
                     <th>Correo</th>
                     <th>Documento</th>
+                    <th>Género</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
                     <th>Fecha Creación</th>
                     <th>Acciones</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-customer>
+            <ng-template pTemplate="body" let-user>
                 <tr>
-                    <td style="font-size: 13px">{{ customer.name }}</td>
-                    <td>{{ customer.country.name }}</td>
-                    <td>{{ customer.company }}</td>
-                    <td>{{ customer.representative.name }}</td>
-                    <td>{{ customer.representative.name }}</td>
+                    <td>{{ user.userName }}</td>
+                    <td>{{ user.name + " " + user.lastName }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.documentNumber }}</td>
+                    <td>{{ user.gender }}</td>
+                    <td>{{ user.role[0].name }}</td>
+                    <td>{{ user.enabled }}</td>
+                    <td>{{ user.creationAt | date:'dd/MM/yyyy' }}</td>
                     <td>
-                        <a (click)="showDialogEdit()"><i class="m-2 feather icon-edit"></i></a>
-                        <a (click)="showDialogCreate()"><i class="m-1 feather icon-trash-2"></i></a>
+                        <a (click)="showDialogEdit()"><i class="m-2 feather icon-edit delete-and-edit"></i></a>
+                        <p-confirmPopup></p-confirmPopup>
+                        <a (click)="confirmDeleteUser($event, user.userName)"><i class="m-1 feather icon-trash-2 delete-and-edit"></i></a>
                     </td>
                 </tr>
             </ng-template>
@@ -35,9 +44,8 @@
     </div>
 </div>
 
-
-<p-dialog header="Crear Usuario" [(visible)]="visibleCreate" [style]="{width: '45vw'}">
-    <form [formGroup]="formCreateUser" (ngSubmit)="enviarFormulario()">
+<p-dialog header="Crear Usuario" [(visible)]="visibleModalCreate" [style]="{width: '45vw'}">
+    <form [formGroup]="formCreateUser" (ngSubmit)="createUser()">
         <div class="container row">
             <div *ngIf="isVisibilityMenssageCreate" class="col-md-12 alert alert-secondary alert-dismissible"
                 style="font-size: 0.81rem;" role="alert">
@@ -88,10 +96,7 @@
                 <label for="inputPassword" class="col-sm-2 col-form-label">Rol(*)</label>
                 <div class="col-sm-12">
                     <select class="form-select" formControlName="role">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <option *ngFor="let rol of role" [ngValue]="rol">{{ rol.name }}</option>
                     </select>
                 </div>
             </div>
@@ -129,7 +134,7 @@
         <div class="border-top">
             <div class="m-3">
                 <p-button type="submit" class="float-end mx-4" [rounded]="true" label="Guardar" severity="secondary"
-                    [disabled]="formCreateUser.invalid" size="small"></p-button>
+                    size="small" [disabled]="formCreateUser.invalid"></p-button>
 
                 <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
                     (onClick)="closeDialogCreate()"></p-button>
@@ -139,8 +144,8 @@
 </p-dialog>
 
 
-<p-dialog header="Actualizar Usuario" [(visible)]="visibleEdit" [style]="{width: '45vw'}">
-    <form [formGroup]="formEditUser" (ngSubmit)="enviarFormulario()">
+<p-dialog header="Actualizar Usuario" [(visible)]="visibleModalEdit" [style]="{width: '45vw'}">
+    <form [formGroup]="formEditUser" (ngSubmit)="createUser()">
         <div class="container row">
             <div *ngIf="isVisibilityMenssageEdit" class="col-md-12 alert alert-secondary alert-dismissible"
                 style="font-size: 0.81rem;" role="alert">
