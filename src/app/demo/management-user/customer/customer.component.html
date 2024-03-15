@@ -1,1 +1,17 @@
-<p>customer works!</p>
+<div class="row">
+    <div class="col-md-2">
+        <p-card header="Advanced Card" subheader="Card Subheader" [style]="{ width: '108%', height: '100%' }">
+            <ng-template pTemplate="header">
+                <img alt="Card" src="https://primefaces.org/cdn/primeng/images/usercard.png" />
+            </ng-template>
+            <p>
+                Lorem ipsum dolor snt quisquam repellat libero asperior
+                quas!
+            </p>
+            <ng-template pTemplate="footer">
+                <p-button label="Save" icon="pi pi-check"></p-button>
+                <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-secondary" [style]="{ 'margin-left': '.5em' }"></p-button>
+            </ng-template>
+        </p-card>
+    </div>
+</div>

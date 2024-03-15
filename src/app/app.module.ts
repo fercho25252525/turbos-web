@@ -37,7 +37,11 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
 
 import UserComponent from './demo/management-user/user/user.component';
+import CustomerComponent from './demo/management-user/customer/customer.component';
+import localeEs from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
 
+registerLocaleData(localeEs);
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,7 +60,8 @@ import UserComponent from './demo/management-user/user/user.component';
     NavItemComponent,
     NavCollapseComponent,
     NavGroupComponent,
-    UserComponent
+    UserComponent,
+    CustomerComponent
   ],
   imports: [
     BrowserModule, 

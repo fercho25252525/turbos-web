@@ -7,6 +7,7 @@ import { AdminComponent } from './theme/layout/admin/admin.component';
 import { GuestComponent } from './theme/layout/guest/guest.component';
 import SignInComponent from './demo/authentication/sign-in/sign-in.component';
 import UserComponent from './demo/management-user/user/user.component';
+import CustomerComponent from './demo/management-user/customer/customer.component';
 
 const routes: Routes = [
   {
@@ -38,8 +39,11 @@ const routes: Routes = [
       },
       {
         path: 'user',
-        // loadComponent: () => import('./demo/management-user/user/user.component')
         component: UserComponent
+      },
+      {
+        path: 'customer',
+        component: CustomerComponent
       },
       {
         path: 'component',

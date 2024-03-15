@@ -124,8 +124,37 @@
   border: solid #63637f;
   border-width: 0 0 0 6px;
   color: #ffffff;
+  font-size: 0.8rem;
 }
 
 .p-toast .p-toast-message.p-toast-message-info .p-toast-message-icon, .p-toast .p-toast-message.p-toast-message-info .p-toast-icon-close {
   color: #efefef;
+}
+
+
+//mensaje alerta success
+.p-toast .p-toast-message.p-toast-message-success {
+  background: #c4c0db;
+  border: solid #656a8f;
+  border-width: 0 0 0 6px;
+  color: #0e0e0e;
+  font-size: 0.8rem;
+}
+
+.p-toast .p-toast-message.p-toast-message-success .p-toast-message-icon, .p-toast .p-toast-message.p-toast-message-success .p-toast-icon-close {
+  color: #4a4d4c;
+}
+
+//mensaje alerta error
+.p-toast .p-toast-message.p-toast-message-error {
+  background: #a37775;
+  border: solid #6d1212;
+  border-width: 0 0 0 6px;
+  color: #121212;
+  font-size: 0.8rem;
+}
+
+.p-toast .p-toast-message.p-toast-message-error .p-toast-message-icon, .p-toast .p-toast-message.p-toast-message-error .p-toast-icon-close {
+  color: #222222;
+  font-size: 0.8rem;
 }

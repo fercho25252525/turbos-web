@@ -19,12 +19,24 @@ export class UserAdd {
     email!: string;
     documentNumber!: string;
     gender!: string;
+    birthDate!: String | null;
+    role!: Role[];
+}
+
+export class UserEdit {
+    userName!: string;
+    name!: string;
+    lastName!: string;
+    email!: string;
+    documentNumber!: string;
+    gender!: string;
     photo!: string;
-    birthDate!: String;
+    enabled!: boolean;
+    birthDate!: String | null;
     role!: Role[];
 }
 
 export class Role {
-    id!: number;
-    name!: string;
+    id!: number | undefined;
+    name!: string | undefined;
 }
