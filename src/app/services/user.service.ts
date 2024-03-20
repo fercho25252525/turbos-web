@@ -21,15 +21,6 @@ export class UserService {
     return this.http.post(`${environment.apiUrl}/userController/v1/addUsers`, user);
   }
 
-  createUserV2(user: any, imageFile: File): Observable<any> {
-    const formData = new FormData();
-    formData.append('user', JSON.stringify(user));
-    formData.append('file', imageFile);
-    const headers = new HttpHeaders();
-    headers.append('Content-Type', 'multipart/form-data');
-    return this.http.post(`${environment.apiUrl}/userController/v1/v2/addUsers`, formData, { headers });
-  }
-
   updateUser(user: any): Observable<any> {
     return this.http.put(`${environment.apiUrl}/userController/v1/UpdateUsers`, user);
   }

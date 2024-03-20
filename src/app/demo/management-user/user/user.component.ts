@@ -18,7 +18,7 @@ export default class UserComponent implements OnInit {
   defaultImgIndefined: string = '/assets/images/user/predeterminadoIndefinido.png';
   
   users: User[] = [];
-  role: Role[] = [];
+  role: Role[] = []; 
   newUser!: UserAdd;
   editUser!: UserEdit;
   newRole!: Role[];
@@ -312,7 +312,10 @@ export default class UserComponent implements OnInit {
   }
 
   confirmDeleteUser(event: Event, user: User) {
+    console.log(JSON.stringify(event)+"");
     this.confirmationService.confirm({
+      
+      
       target: event.target as EventTarget,
       message: `¿Esta seguro de que desea borrar el usuario ${user.userName}?`,
       accept: () => {

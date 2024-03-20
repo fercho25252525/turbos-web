@@ -1,17 +1,242 @@
-<div class="row">
-    <div class="col-md-2">
-        <p-card header="Advanced Card" subheader="Card Subheader" [style]="{ width: '108%', height: '100%' }">
-            <ng-template pTemplate="header">
-                <img alt="Card" src="https://primefaces.org/cdn/primeng/images/usercard.png" />
-            </ng-template>
-            <p>
-                Lorem ipsum dolor snt quisquam repellat libero asperior
-                quas!
-            </p>
-            <ng-template pTemplate="footer">
-                <p-button label="Save" icon="pi pi-check"></p-button>
-                <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-secondary" [style]="{ 'margin-left': '.5em' }"></p-button>
-            </ng-template>
-        </p-card>
+<div class="card">
+    <p-toast position="bottom-center" [showTransformOptions]="'translateY(100%)'" [showTransitionOptions]="'1000ms'"
+    [hideTransitionOptions]="'1000ms'" [showTransformOptions]="'translateX(100%)'"></p-toast>
+    <div class="row m-2 mt-4">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <span class="p-input-icon-right" [style]="{ width: '100%', height: '100%' }">
+                <i class="pi pi-spin pi-spinner"></i>
+                <input type="text" class="p-inputtext-lg" pInputText style="width: 100%;" />
+            </span>
+        </div>
+        <div class="col-md-4">
+            <p-button class="float-end" [rounded]="true" label="Crear Cliente" (click)="showDialogCreate()"
+                [raised]="true" severity="secondary"></p-button>
+        </div>
+    </div>
+
+
+   
+
+    <div class="mx-4">
+        <strong>20 clientes encontrados</strong>
+    </div>
+    <!-- width="67" height="80" -->
+
+    <div class="row m-2 mt-4">
+        <div class="col-md-4 col-sm-6 p-2" *ngFor="let customer of customers">           
+            <p-card header="" subheader="" [style]="{ width: '90%', height: '70%' }">
+                <ng-template pTemplate="header">
+                    <div class="row m-1">
+                        <div class="col-4">
+                            <p-image [src]="getImgUser(customer)" [style]="{'width': '80px', 'height': 'auto', 'max-width': '100%', 'border-radius': '50%'}" alt="Image" previewImageSizes="1000vw" [preview]="true"></p-image>
+                        </div>                
+                        
+                        <div class="col-8" style="font-size: 0.75rem;">
+                            <div>{{customer.name}} {{customer.lastName}}</div>
+                            <div>{{customer.documentNumber}}</div>
+                            <div>{{customer.email}}</div>
+                            <div class="mt-2 position-relative">
+                                <div class="position-absolute" style="right: 50; bottom: 0;">
+                                    <p-speedDial [model]="items!"  (onClick)="generateCommand(customer)" [mask]="true"  class="speeddial-right custom-icon" direction="right"></p-speedDial>
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                </ng-template>
+            </p-card>
+        </div>
     </div>
 </div>
+
+
+
+<p-dialog header="Crear Cliente" [(visible)]="visibleModalCreate" [style]="{width: '45vw'}">
+    <form [formGroup]="formCreateCustomer" (ngSubmit)="createCustomer()">
+        <div class="container row">
+            <div *ngIf="isVisibilityMenssageCreate" class="col-md-12 alert alert-secondary alert-dismissible"
+                style="font-size: 0.81rem;" role="alert">
+                Todos los campos con (*) son obligatorios.
+                <button type="button" class="btn-close" (click)="showVisibilityMenssageCreate()" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="inputName" class="col-sm-2 col-form-label">Nombre(*)</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="name" class="form-control" id="inputName">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputLastName" class="col-sm-2 col-form-label">Apellido(*)</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="lastName" class="form-control" id="inputLastName">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputDocument" class="col-sm-2 col-form-label">Documento(*)</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="document" class="form-control" id="inputDocument">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputEmail" class="col-sm-2 col-form-label">Correo(*)</label>
+                <div class="col-sm-12">
+                    <input type="email" formControlName="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                        class="form-control" id="inputEmail">
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="inputGender" class="col-sm-2 col-form-label">Género</label>
+                <div class="col-sm-12">
+                    <select class="form-select" formControlName="gender" aria-label="Default select example"
+                        id="inputGender">
+                        <option value="Hombre">Hombre</option>
+                        <option value="Mujer">Mujer</option>
+                        <option value="Indefinido">Indefinido</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputFirsthDate" class="col-sm-2 col-form-label">Dirección</label>
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="address" class="form-control" id="inputDocument">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputFirsthDate" class="col-sm-2 col-form-label">Teléfono(*)</label>
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <div class="col-sm-12">
+                            <p-inputMask mask="(999) 999-9999" formControlName="phone" placeholder="(999) 999-9999"></p-inputMask>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">                
+            </div>
+            
+            <div class="col-md-7 mb-3">
+                <label for="inputFirsthDate" class="col-sm-2 col-form-label">Cargar Foto Perfil</label>
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <div class="input-group">
+                            <input type="file" formControlName="photo" (change)="onFileSelected($event)"
+                                accept="image/png, image/jpeg" class="form-control" id="inputGroupFile04"
+                                aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-top">
+            <div class="m-3">
+                <p-button type="submit" class="float-end mx-4" [rounded]="true" label="Guardar" severity="secondary"
+                    size="small" [disabled]="formCreateCustomer.invalid"></p-button>
+                <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
+                    (onClick)="closeDialogCreate()"></p-button>
+            </div>
+        </div>
+    </form>
+</p-dialog>
+
+<p-dialog header="Editar Cliente" [(visible)]="visibleModalEdit" [style]="{width: '45vw'}">
+    <form [formGroup]="formEditCustomer" (ngSubmit)="editCustomer()">
+        <div class="container row">
+            <div *ngIf="isVisibilityMenssageEdit" class="col-md-12 alert alert-secondary alert-dismissible"
+                style="font-size: 0.81rem;" role="alert">
+                Todos los campos con (*) son obligatorios.
+                <button type="button" class="btn-close" (click)="showVisibilityMenssageEdit()" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="inputName" class="col-sm-2 col-form-label">Nombre(*)</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="name" class="form-control" id="inputName">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputLastName" class="col-sm-2 col-form-label">Apellido(*)</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="lastName" class="form-control" id="inputLastName">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputDocument" class="col-sm-2 col-form-label">Documento(*)</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="document" class="form-control" id="inputDocument">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputEmail" class="col-sm-2 col-form-label">Correo(*)</label>
+                <div class="col-sm-12">
+                    <input type="email" formControlName="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                        class="form-control" id="inputEmail">
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="inputGender" class="col-sm-2 col-form-label">Género</label>
+                <div class="col-sm-12">
+                    <select class="form-select" formControlName="gender" aria-label="Default select example"
+                        id="inputGender">
+                        <option value="Hombre">Hombre</option>
+                        <option value="Mujer">Mujer</option>
+                        <option value="Indefinido">Indefinido</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputFirsthDate" class="col-sm-2 col-form-label">Dirección</label>
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="address" class="form-control" id="inputDocument">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputFirsthDate" class="col-sm-2 col-form-label">Teléfono(*)</label>
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <div class="col-sm-12">
+                            <p-inputMask mask="(999) 999-9999" formControlName="phone" placeholder="(999) 999-9999"></p-inputMask>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">                
+            </div>
+            
+            <div class="col-md-7 mb-3">
+                <label for="inputFirsthDate" class="col-sm-2 col-form-label">Cargar Foto Perfil</label>
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <div class="input-group">
+                            <input type="file" formControlName="photo" (change)="onFileSelected($event)"
+                                accept="image/png, image/jpeg" class="form-control" id="inputGroupFile04"
+                                aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-top">
+            <div class="m-3">
+                <p-button type="submit" class="float-end mx-4" [rounded]="true" label="Guardar" severity="secondary"
+                    size="small" [disabled]="formEditCustomer.invalid"></p-button>
+                <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
+                    (onClick)="closeDialogEdit()"></p-button>
+            </div>
+        </div>
+    </form>
+</p-dialog>

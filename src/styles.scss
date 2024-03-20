@@ -1,5 +1,6 @@
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
 
 // Theme Font
 @import 'scss/themes/font/theme-font';
@@ -127,7 +128,8 @@
   font-size: 0.8rem;
 }
 
-.p-toast .p-toast-message.p-toast-message-info .p-toast-message-icon, .p-toast .p-toast-message.p-toast-message-info .p-toast-icon-close {
+.p-toast .p-toast-message.p-toast-message-info .p-toast-message-icon,
+.p-toast .p-toast-message.p-toast-message-info .p-toast-icon-close {
   color: #efefef;
 }
 
@@ -141,7 +143,8 @@
   font-size: 0.8rem;
 }
 
-.p-toast .p-toast-message.p-toast-message-success .p-toast-message-icon, .p-toast .p-toast-message.p-toast-message-success .p-toast-icon-close {
+.p-toast .p-toast-message.p-toast-message-success .p-toast-message-icon,
+.p-toast .p-toast-message.p-toast-message-success .p-toast-icon-close {
   color: #4a4d4c;
 }
 
@@ -154,7 +157,65 @@
   font-size: 0.8rem;
 }
 
-.p-toast .p-toast-message.p-toast-message-error .p-toast-message-icon, .p-toast .p-toast-message.p-toast-message-error .p-toast-icon-close {
+.p-toast .p-toast-message.p-toast-message-error .p-toast-message-icon,
+.p-toast .p-toast-message.p-toast-message-error .p-toast-icon-close {
   color: #222222;
   font-size: 0.8rem;
+}
+
+.rounded-border {
+  border-radius: 10px;
+  /* ajusta este valor según lo desees */
+}
+
+
+.p-inputtext {
+  width: 100%;
+  height: 41px;
+  background-color: #f7f7f7;
+  border-color: #cecbcb;
+}
+
+
+// .p-card-header img {
+//   width: 50%;
+// }
+
+img {
+  border-radius: 65px;
+}
+
+a {
+  color: rgb(228 231 233);
+  text-decoration: none;
+}
+
+.p-speeddial-button.p-button.p-button-icon-only {
+  background-color:  #4a4d4c;
+  border-radius: 1px solid rgb(0, 0, 0);
+  width: 25px;
+  height: 3px;
+}
+
+.p-speeddial-action {
+    width: 2vw;
+    height: 2vw;
+}
+
+.custom-icon .pi {
+  font-size: 0.85rem; /* Ajusta el tamaño del icono según necesites */
+  padding: 100px;
+}
+
+@media screen and (min-width: 10px) {
+  .custom-icon .pi {
+      font-size: 0.5rem; /* Tamaño del icono para pantallas más grandes */
+  }
+}
+
+/* Media query para ajustar el tamaño del icono en pantallas muy grandes */
+@media screen and (min-width: 1200px) {
+  .custom-icon .pi {
+      font-size: 0.7rem; /* Tamaño del icono para pantallas muy grandes */
+  }
 }

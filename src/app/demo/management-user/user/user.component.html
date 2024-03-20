@@ -12,7 +12,7 @@
             [rowsPerPageOptions]="[5, 8, 10, 20, 30]" [loading]="loadingTableData">
             <ng-template pTemplate="header" class="bg-dark">
                 <tr>
-                    <th>Usuario</th>
+                    <th></th>
                     <th>Usuario</th>
                     <th>Nombre</th>
                     <th>Correo</th>
@@ -26,7 +26,9 @@
             </ng-template>
             <ng-template pTemplate="body" let-user>
                 <tr>
-                    <td><img [src]="getImgUser(user)" alt="Imagen" class="img-user"></td>
+                    <td>
+                        <p-image [src]="getImgUser(user)" alt="Image" width="50" class="img-user" [preview]="true" [style]="{ width: '1008%', height: '1000%' }"></p-image>
+                    <!-- <td><img [src]="getImgUser(user)" alt="Imagen" class="img-user"></td> -->
                     <td>{{ user.userName }}</td>
                     <td>{{ user.name + " " + user.lastName }}</td>
                     <td>{{ user.email }}</td>
@@ -121,7 +123,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6 mb-3">
+            <div class="col-md-7 mb-3">
                 <label for="inputFirsthDate" class="col-sm-2 col-form-label">Cargar foto</label>
                 <div class="col-sm-12">
                     <div class="input-group">
@@ -231,7 +233,7 @@
                 </div>
 
             </div>
-            <div class="col-md-6 mb-3">
+            <div class="col-md-7 mb-3">
                 <label for="inputFirsthDate" class="col-sm-2 col-form-label">Actualizar foto</label>
                 <div class="col-sm-12">
                     <div class="input-group">

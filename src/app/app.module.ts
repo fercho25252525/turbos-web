@@ -35,6 +35,10 @@ import { MessagesModule } from 'primeng/messages';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ConfirmationService } from 'primeng/api';
+import { ImageModule } from 'primeng/image';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputMaskModule } from 'primeng/inputmask';
+import { SpeedDialModule } from 'primeng/speeddial';
 
 import UserComponent from './demo/management-user/user/user.component';
 import CustomerComponent from './demo/management-user/customer/customer.component';
@@ -80,7 +84,11 @@ registerLocaleData(localeEs);
     ToastModule,
     MessagesModule,
     SelectButtonModule,
-    ConfirmPopupModule
+    ConfirmPopupModule,
+    ImageModule,
+    InputTextModule,
+    InputMaskModule,
+    SpeedDialModule
   ],
   providers: [MessageService,ConfirmationService],
   bootstrap: [AppComponent]
