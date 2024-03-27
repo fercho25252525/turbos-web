@@ -47,7 +47,7 @@ export class AuthService {
     'Authorization': 'Basic ' + credentials})
     let params = new URLSearchParams();
     params.set('grant_type', 'password')
-    params.set('username', user.username)
+    params.set('username', user.userName)
     params.set('password', user.password)
     return this.http.post<any>(url+'oauth/token', params.toString(), {headers: httpHeaders});
   }
@@ -58,7 +58,7 @@ export class AuthService {
     this._user.name = payload.name;
     this._user.lastName = payload.lasName;
     this._user.email = payload.email;
-    this._user.username = payload.user_name;
+    this._user.userName = payload.user_name;
     this._user.roles = payload.authorities;
 
     sessionStorage.setItem('user', JSON.stringify(this._user));

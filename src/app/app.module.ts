@@ -25,7 +25,27 @@ import { NavItemComponent } from './theme/layout/admin/navigation/nav-content/na
 import { SharedModule } from './theme/shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { TableModule } from 'primeng/table';
+import { DialogModule } from 'primeng/dialog';
+import { PasswordModule } from 'primeng/password';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { MessagesModule } from 'primeng/messages';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ConfirmationService } from 'primeng/api';
+import { ImageModule } from 'primeng/image';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputMaskModule } from 'primeng/inputmask';
+import { SpeedDialModule } from 'primeng/speeddial';
 
+import UserComponent from './demo/management-user/user/user.component';
+import CustomerComponent from './demo/management-user/customer/customer.component';
+import localeEs from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeEs);
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,6 +64,8 @@ import { ButtonModule } from 'primeng/button';
     NavItemComponent,
     NavCollapseComponent,
     NavGroupComponent,
+    UserComponent,
+    CustomerComponent
   ],
   imports: [
     BrowserModule, 
@@ -54,9 +76,21 @@ import { ButtonModule } from 'primeng/button';
     ReactiveFormsModule, 
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    ButtonModule
+    ButtonModule,
+    CardModule,
+    TableModule,
+    DialogModule,
+    PasswordModule,
+    ToastModule,
+    MessagesModule,
+    SelectButtonModule,
+    ConfirmPopupModule,
+    ImageModule,
+    InputTextModule,
+    InputMaskModule,
+    SpeedDialModule
   ],
-  providers: [],
+  providers: [MessageService,ConfirmationService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -1,6 +1,6 @@
-
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
 
 // Theme Font
 @import 'scss/themes/font/theme-font';
@@ -44,27 +44,178 @@
 @import 'scss/themes/custom';
 
 
-.text-error{
+.p-selectbutton .p-button.p-highlight {
+  background: #c3cbd8;
+  border-color: #859abb;
+  color: #ffffff;
+}
+
+.text-error {
   color: rgb(172, 7, 7) !important;
   font-size: 0.7rem;
 }
 
 .bg-navbar {
   color: rgb(253, 253, 253) !important;
-  background: linear-gradient(100deg, rgb(32, 41, 75), lighten( rgb(128, 142, 192), 15%));
+  background: linear-gradient(100deg, rgb(32, 41, 75), lighten(rgb(128, 142, 192), 15%));
 }
 
 .bg-navigation {
   color: rgb(253, 253, 253) !important;
-  background: linear-gradient(150deg, rgb(32, 41, 75), lighten( rgb(99, 111, 155), 15%));
+  background: linear-gradient(150deg, rgb(32, 41, 75), lighten(rgb(99, 111, 155), 15%));
 }
 
-.button-principal{
+.button-principal {
   color: rgb(253, 253, 253) !important;
-  background: linear-gradient(5deg, rgb(32, 41, 75), lighten( rgb(165, 158, 158), 20%));
+  background: linear-gradient(5deg, rgb(32, 41, 75), lighten(rgb(165, 158, 158), 20%));
 }
 
-.custom-checkbox:checked + label::before {
-  background-color: rgba(33,48,89,255) !important; /* Cambia el color de fondo del checkbox cuando está marcado a negro */
-  border-color: rgba(33,48,89,255) !important; /* Cambia el color del borde del checkbox a negro */
+.custom-checkbox:checked+label::before {
+  background-color: rgba(33, 48, 89, 255) !important;
+  /* Cambia el color de fondo del checkbox cuando está marcado a negro */
+  border-color: rgba(33, 48, 89, 255) !important;
+  /* Cambia el color del borde del checkbox a negro */
+}
+
+.p-paginator .p-paginator-current {
+  font-size: 0.8rem;
+}
+
+.p-paginator {
+  font-size: 0.8rem;
+  // background-color: #f0f1f1;
+}
+
+.p-paginator .p-dropdown .p-dropdown-label {
+  font-size: 0.9rem;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background-color: rgb(108, 114, 145);
+  color: #ffffff;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight.p-focus {
+  font-size: 1rem;
+  background-color: rgb(108, 114, 145);
+  color: #ffffff;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item.p-highlight {
+  background-color: rgb(108, 114, 145);
+  color: #ffffff;
+}
+
+.p-confirm-popup .p-confirm-popup-content {
+  font-size: 0.8rem;
+}
+
+.p-confirm-popup .p-confirm-popup-footer button:last-child {
+  background-color: rgb(108, 114, 145);
+  border-color: rgb(108, 114, 145);
+  border: solid 1px rgb(108, 114, 145);
+}
+
+.p-button.p-button-text {
+  color: #979fac;
+}
+
+.p-toast .p-toast-message.p-toast-message-info {
+  background: #35353b;
+  border: solid #63637f;
+  border-width: 0 0 0 6px;
+  color: #ffffff;
+  font-size: 0.8rem;
+}
+
+.p-toast .p-toast-message.p-toast-message-info .p-toast-message-icon,
+.p-toast .p-toast-message.p-toast-message-info .p-toast-icon-close {
+  color: #efefef;
+}
+
+
+//mensaje alerta success
+.p-toast .p-toast-message.p-toast-message-success {
+  background: #c4c0db;
+  border: solid #656a8f;
+  border-width: 0 0 0 6px;
+  color: #0e0e0e;
+  font-size: 0.8rem;
+}
+
+.p-toast .p-toast-message.p-toast-message-success .p-toast-message-icon,
+.p-toast .p-toast-message.p-toast-message-success .p-toast-icon-close {
+  color: #4a4d4c;
+}
+
+//mensaje alerta error
+.p-toast .p-toast-message.p-toast-message-error {
+  background: #a37775;
+  border: solid #6d1212;
+  border-width: 0 0 0 6px;
+  color: #121212;
+  font-size: 0.8rem;
+}
+
+.p-toast .p-toast-message.p-toast-message-error .p-toast-message-icon,
+.p-toast .p-toast-message.p-toast-message-error .p-toast-icon-close {
+  color: #222222;
+  font-size: 0.8rem;
+}
+
+.rounded-border {
+  border-radius: 10px;
+  /* ajusta este valor según lo desees */
+}
+
+
+.p-inputtext {
+  width: 100%;
+  height: 41px;
+  background-color: #f7f7f7;
+  border-color: #cecbcb;
+}
+
+
+// .p-card-header img {
+//   width: 50%;
+// }
+
+img {
+  border-radius: 65px;
+}
+
+a {
+  color: rgb(228 231 233);
+  text-decoration: none;
+}
+
+.p-speeddial-button.p-button.p-button-icon-only {
+  background-color:  #4a4d4c;
+  border-radius: 1px solid rgb(0, 0, 0);
+  width: 25px;
+  height: 3px;
+}
+
+.p-speeddial-action {
+    width: 2vw;
+    height: 2vw;
+}
+
+.custom-icon .pi {
+  font-size: 0.85rem; /* Ajusta el tamaño del icono según necesites */
+  padding: 100px;
+}
+
+@media screen and (min-width: 10px) {
+  .custom-icon .pi {
+      font-size: 0.5rem; /* Tamaño del icono para pantallas más grandes */
+  }
+}
+
+/* Media query para ajustar el tamaño del icono en pantallas muy grandes */
+@media screen and (min-width: 1200px) {
+  .custom-icon .pi {
+      font-size: 0.7rem; /* Tamaño del icono para pantallas muy grandes */
+  }
 }
