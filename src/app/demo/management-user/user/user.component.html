@@ -5,7 +5,7 @@
         <p-button class="float-end" [rounded]="true" label="Crear Usuario" [raised]="true" severity="secondary"
             (click)="showDialogCreate()"></p-button>
     </div>
-    <div class="card mx-4">
+    <div class="card mx-4" *ngIf="users.length > 0">
         <p-table [value]="users" styleClass="p-datatable-striped" [paginator]="true" [rows]="8"
             [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
             currentPageReportTemplate="{first} de {last} de {totalRecords} registros"
@@ -13,7 +13,7 @@
             <ng-template pTemplate="header" class="bg-dark">
                 <tr>
                     <th></th>
-                    <th>Usuario</th>
+                    <th>Usuario</th> 
                     <th>Nombre</th>
                     <th>Correo</th>
                     <th>Documento</th>

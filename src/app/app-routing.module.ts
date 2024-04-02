@@ -8,6 +8,9 @@ import { GuestComponent } from './theme/layout/guest/guest.component';
 import SignInComponent from './demo/authentication/sign-in/sign-in.component';
 import UserComponent from './demo/management-user/user/user.component';
 import CustomerComponent from './demo/management-user/customer/customer.component';
+import ProviderComponent from './demo/provider/provider.component';
+import InventoryComponent from './demo/inventory/inventory.component';
+import WorkOrderComponent from './demo/work-order/work-order.component';
 
 const routes: Routes = [
   {
@@ -44,6 +47,18 @@ const routes: Routes = [
       {
         path: 'customer',
         component: CustomerComponent
+      }, 
+      {
+        path: 'provider',
+        component: ProviderComponent
+      },
+      {
+        path: 'inventory',
+        component: InventoryComponent
+      },
+      {
+        path: 'work-order',
+        component: WorkOrderComponent
       },
       {
         path: 'component',

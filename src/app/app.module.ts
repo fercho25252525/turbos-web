@@ -39,11 +39,15 @@ import { ImageModule } from 'primeng/image';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { SpeedDialModule } from 'primeng/speeddial';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 import UserComponent from './demo/management-user/user/user.component';
 import CustomerComponent from './demo/management-user/customer/customer.component';
 import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
+import ProviderComponent  from './demo/provider/provider.component';
+import InventoryComponent from './demo/inventory/inventory.component';
+import WorkOrderComponent from './demo/work-order/work-order.component';
 
 registerLocaleData(localeEs);
 @NgModule({
@@ -65,7 +69,10 @@ registerLocaleData(localeEs);
     NavCollapseComponent,
     NavGroupComponent,
     UserComponent,
-    CustomerComponent
+    CustomerComponent,
+    ProviderComponent,
+    InventoryComponent,
+    WorkOrderComponent
   ],
   imports: [
     BrowserModule, 
@@ -88,7 +95,8 @@ registerLocaleData(localeEs);
     ImageModule,
     InputTextModule,
     InputMaskModule,
-    SpeedDialModule
+    SpeedDialModule,
+    InputNumberModule
   ],
   providers: [MessageService,ConfirmationService],
   bootstrap: [AppComponent]

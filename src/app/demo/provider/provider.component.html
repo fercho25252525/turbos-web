@@ -1,0 +1,155 @@
+<div class="card">
+    <p-toast position="bottom-center" [showTransformOptions]="'translateY(100%)'" [showTransitionOptions]="'1000ms'"
+        [hideTransitionOptions]="'1000ms'" [showTransformOptions]="'translateX(100%)'"></p-toast>
+    <div class="mx-4 my-3">
+        <p-button class="float-end" [rounded]="true" label="Crear Proveedor" [raised]="true" severity="secondary"
+            (click)="showDialogCreate()"></p-button>
+    </div>
+    <div class="card mx-4" *ngIf="provider.length > 0">
+        <p-table [value]="provider" styleClass="p-datatable-striped" [paginator]="true" [rows]="8"
+            [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
+            currentPageReportTemplate="{first} de {last} de {totalRecords} registros"
+            [rowsPerPageOptions]="[5, 8, 10, 20, 30]" [loading]="loadingTableData">
+            <ng-template pTemplate="header" class="bg-dark">
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th> 
+                    <th>Correo</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
+                    <th>Información</th>
+                    <th>Creación</th>                    
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-provider>
+                <tr>
+                    <td>{{ provider.id }}</td>
+                    <td>{{ provider.name }}</td>
+                    <td>{{ provider.email }}</td>
+                    <td>{{ provider.address }}</td>
+                    <td>{{ provider.phone }}</td>
+                    <td>{{ provider.additionalInfo }}</td>
+                    <td>{{ provider.dateCreation | date:'dd/MM/yyyy' }}</td>
+                    <td>
+                        <a (click)="showDialogEdit(provider)"><i class="m-2 feather icon-edit delete-and-edit"></i></a>
+                        <p-confirmPopup></p-confirmPopup>
+                        <a (click)="confirmDeleteUser($event, provider)"><i
+                                class="m-1 feather icon-trash-2 delete-and-edit"></i></a>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<p-dialog header="Crear Proveedor" [(visible)]="visibleModalCreate" [style]="{width: '45vw'}">
+    <form [formGroup]="formCreateProvider" (ngSubmit)="createProvider()">
+        <div class="container row">
+            <div *ngIf="isVisibilityMenssageCreate" class="col-md-12 alert alert-secondary alert-dismissible"
+                style="font-size: 0.81rem;" role="alert">
+                Todos los campos con (*) son obligatorios.
+                <button type="button" class="btn-close" (click)="showVisibilityMenssageCreate()" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="inputName" class="col-sm-2 col-form-label">Nombre(*)</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="name" class="form-control" id="inputName">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputLastName" class="col-sm-2 col-form-label">Dirección(*)</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="address" class="form-control" id="inputLastName">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputUsername" class="col-sm-2 col-form-label">Teléfono(*)</label>
+                <div class="col-sm-12">
+                    <p-inputMask mask="(999) 999-9999" formControlName="phone" placeholder="(999) 999-9999"></p-inputMask>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputEmail" class="col-sm-2 col-form-label">Correo(*)</label>
+                <div class="col-sm-12">
+                    <input type="email" formControlName="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                        class="form-control" id="inputEmail">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputEmail" class="col-sm-2 col-form-label">información</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="additionalInfo"
+                        class="form-control" id="inputEmail">
+                </div>
+            </div>
+        </div>
+
+        <div class="border-top">
+            <div class="m-3">
+                <p-button type="submit" class="float-end mx-4" [rounded]="true" label="Guardar" severity="secondary"
+                    size="small" [disabled]="formCreateProvider.invalid"></p-button>
+                <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
+                    (onClick)="closeDialogCreate()"></p-button>
+            </div>
+        </div>
+    </form>
+</p-dialog>
+
+
+<p-dialog header="Actualizar Proveedor" [(visible)]="visibleModalEdit" [style]="{width: '45vw'}">
+    <form [formGroup]="formEditProvider" (ngSubmit)="updateProvider()">
+        <div class="container row">
+            <div *ngIf="isVisibilityMenssageCreate" class="col-md-12 alert alert-secondary alert-dismissible"
+                style="font-size: 0.81rem;" role="alert">
+                Todos los campos con (*) son obligatorios.
+                <button type="button" class="btn-close" (click)="showVisibilityMenssageCreate()" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="inputName" class="col-sm-2 col-form-label">Nombre(*)</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="name" class="form-control" id="inputName">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputLastName" class="col-sm-2 col-form-label">Dirección(*)</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="address" class="form-control" id="inputLastName">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputUsername" class="col-sm-2 col-form-label">Teléfono(*)</label>
+                <div class="col-sm-12">
+                    <p-inputMask mask="(999) 999-9999" formControlName="phone" placeholder="(999) 999-9999"></p-inputMask>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputEmail" class="col-sm-2 col-form-label">Correo(*)</label>
+                <div class="col-sm-12">
+                    <input type="email" formControlName="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                        class="form-control" id="inputEmail">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputInfo" class="col-sm-2 col-form-label">Información</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="additionalInfo" 
+                        class="form-control" id="inputInfo">
+                </div>
+            </div>
+        </div>
+
+        <div class="border-top">
+            <div class="m-3">
+                <p-button type="submit" class="float-end mx-4" [rounded]="true" label="Guardar" severity="secondary"
+                    size="small" [disabled]="formEditProvider.invalid"></p-button>
+                <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
+                    (onClick)="closeDialogEdit()"></p-button>
+            </div>
+        </div>
+    </form>
+</p-dialog>

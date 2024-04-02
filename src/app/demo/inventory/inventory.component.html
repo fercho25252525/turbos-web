@@ -1,0 +1,222 @@
+<div class="card">
+    <p-toast position="bottom-center" [showTransformOptions]="'translateY(100%)'" [showTransitionOptions]="'1000ms'"
+        [hideTransitionOptions]="'1000ms'" [showTransformOptions]="'translateX(100%)'"></p-toast>
+    <div class="mx-4 my-3">
+        <p-button class="float-end" [rounded]="true" label="Crear Producto" [raised]="true" severity="secondary"
+            (click)="showDialogCreate()"></p-button>
+    </div>
+    <div class="card mx-4" *ngIf="inventory.length > 0">
+        <p-table [value]="inventory" styleClass="p-datatable-striped" [paginator]="true" [rows]="8"
+            [showCurrentPageReport]="true" [tableStyle]="{ 'min-width': '50rem' }"
+            currentPageReportTemplate="{first} de {last} de {totalRecords} registros"
+            [rowsPerPageOptions]="[5, 8, 10, 20, 30]" [loading]="loadingTableData">
+            <ng-template pTemplate="header" class="bg-dark">
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Categoria</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Estado</th>
+                    <th>Proveedor</th>
+                    <th>Descripción</th>
+                    <th>Fecha Compra</th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-inventory>
+                <tr>
+                    <td>{{ inventory.id }}</td>
+                    <td>{{ inventory.name }}</td>
+                    <td>{{ inventory.category }}</td>
+                    <td>{{ inventory.cuantityStock }}</td>
+                    <td>{{ inventory.unitPrice }}</td>
+                    <td>{{ inventory.status }}</td>
+                    <td>{{ inventory.provider.name }}</td>
+                    <td> <a (click)="showDialogComment(inventory.description)"><i class="m-1 pi pi-comment delete-and-edit"></i></a></td>
+                    <td>{{ inventory.purchaseDate | date:'dd/MM/yyyy' }}</td>
+                    <td>
+                        <a (click)="showDialogEdit(inventory)"><i class="m-2 feather icon-edit delete-and-edit"></i></a>
+                        <p-confirmPopup></p-confirmPopup>
+                        <a (click)="confirmDeleteUser($event, inventory)"><i
+                                class="m-1 feather icon-trash-2 delete-and-edit"></i></a>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<p-dialog header="Comentario" [(visible)]="visibleModalComment" [style]="{width: '25vw'}">
+    <p>{{ descriptoinModal }}</p>
+</p-dialog>
+
+<p-dialog header="Crear Producto" [(visible)]="visibleModalCreate" [style]="{width: '45vw'}">
+    <form [formGroup]="formCreateProduct" (ngSubmit)="createProduct()">
+        <div class="container row">
+            <div *ngIf="isVisibilityMenssageCreate" class="col-md-12 alert alert-secondary alert-dismissible"
+                style="font-size: 0.81rem;" role="alert">
+                Todos los campos con (*) son obligatorios.
+                <button type="button" class="btn-close" (click)="showVisibilityMenssageCreate()" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+            </div>
+
+            <div class="col-md-4 mb-3">
+                <label for="inputName" class="col-sm-2 col-form-label">Nombre(*)</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="name" class="form-control" id="inputName">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputLastName" class="col-sm-2 col-form-label">Categoria(*)</label>
+                <select class="form-select" formControlName="category" aria-label="Default select example"
+                    id="inputGender">
+                    <option value="Terminales">Terminales</option>
+                    <option value="Rótulas">Rótulas</option>
+                    <option value="Anillos">Anillos</option>
+                    <option value="Carcasas">Carcasas</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputUsername" class="col-sm-2 col-form-label">Cantidad(*)</label>
+                <div class="col-sm-12">
+                    <p-inputNumber formControlName="cuantityStock" inputId="minmax" mode="decimal" [min]="0" [max]="1000"> </p-inputNumber>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputEmail" class="col-sm-2 col-form-label">Estado(*)</label>
+                <select class="form-select" formControlName="status" aria-label="Default select example"
+                    id="inputGender">
+                    <option value="Bueno">Bueno</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Malo">Malo</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputEmail" class="col-sm-2 col-form-label">Proveedor</label>
+                <select class="form-select" formControlName="provider">
+                    <option *ngFor="let pro of provider" [ngValue]="pro.id">{{ pro.name }}</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputEmail" class="col-sm-2 col-form-label">Descrición</label>
+                <div class="col-sm-12">
+                    <textarea class="form-control" width="100px" formControlName="description" aria-label="With textarea"></textarea>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputEmail" class="col-sm-2 col-form-label">Precio Unidad(*)</label>
+                <div class="col-sm-12">     
+                    <p-inputNumber formControlName="unitPrice" inputId="currency-cop" [minFractionDigits]="0" mode="currency" currency="COP" locale="es-CO"> </p-inputNumber>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputEmail" class="col-sm-2 col-form-label">Fecha compra(*)</label>
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <input formControlName="purchaseDate" class="form-control" [minDate]="minDate"
+                            placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" id="inputFirsthDate" />
+                        <button class="btn button-calendar  bi bi-calendar3" (click)="d.toggle()" type="button"><i
+                                class="feather icon-calendar text-secondary"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-top">
+            <div class="m-3">
+                <p-button type="submit" class="float-end mx-4" [rounded]="true" label="Guardar" severity="secondary"
+                    size="small" [disabled]="formCreateProduct.invalid"></p-button>
+                <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
+                    (onClick)="closeDialogCreate()"></p-button>
+            </div>
+        </div>
+    </form>
+</p-dialog>
+
+
+<p-dialog header="Actualizar Usuario" [(visible)]="visibleModalEdit" [style]="{width: '45vw'}">
+    <form [formGroup]="formEditProduct" (ngSubmit)="updateProvider()">
+        <div class="container row">
+            <div *ngIf="isVisibilityMenssageCreate" class="col-md-12 alert alert-secondary alert-dismissible"
+                style="font-size: 0.81rem;" role="alert">
+                Todos los campos con (*) son obligatorios.
+                <button type="button" class="btn-close" (click)="showVisibilityMenssageCreate()" data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+            </div>
+
+           
+            <div class="col-md-4 mb-3">
+                <label for="inputName" class="col-sm-2 col-form-label">Nombre(*)</label>
+                <div class="col-sm-12">
+                    <input type="text" formControlName="name" class="form-control" id="inputName">
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputLastName" class="col-sm-2 col-form-label">Categoria(*)</label>
+                <select class="form-select" formControlName="category" aria-label="Default select example"
+                    id="inputGender">
+                    <option value="Terminales">Terminales</option>
+                    <option value="Rótulas">Rótulas</option>
+                    <option value="Anillos">Anillos</option>
+                    <option value="Carcasas">Carcasas</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputUsername" class="col-sm-2 col-form-label">Cantidad(*)</label>
+                <div class="col-sm-12">
+                    <p-inputNumber formControlName="cuantityStock" inputId="minmax" mode="decimal" [min]="0" [max]="1000"> </p-inputNumber>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputEmail" class="col-sm-2 col-form-label">Estado(*)</label>
+                <select class="form-select" formControlName="status" aria-label="Default select example"
+                    id="inputGender">
+                    <option value="Bueno">Bueno</option>
+                    <option value="Regular">Regular</option>
+                    <option value="Malo">Malo</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputEmail" class="col-sm-2 col-form-label">Proveedor</label>
+                <select class="form-select" formControlName="provider">
+                    <option *ngFor="let pro of provider" [ngValue]="pro.id">{{ pro.name }}</option>
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputEmail" class="col-sm-2 col-form-label">Descrición</label>
+                <div class="col-sm-12">
+                    <textarea class="form-control" width="100px" formControlName="description" aria-label="With textarea"></textarea>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputEmail" class="col-sm-2 col-form-label">Precio Unidad(*)</label>
+                <div class="col-sm-12">     
+                    <p-inputNumber formControlName="unitPrice" inputId="currency-cop" [minFractionDigits]="0" mode="currency" currency="COP" locale="es-CO"> </p-inputNumber>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="inputEmail" class="col-sm-2 col-form-label">Fecha compra(*)</label>
+                <div class="col-sm-12">
+                    <div class="input-group">
+                        <input formControlName="purchaseDate" class="form-control" [minDate]="minDate"
+                            placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker" id="inputFirsthDate" />
+                        <button class="btn button-calendar  bi bi-calendar3" (click)="d.toggle()" type="button"><i
+                                class="feather icon-calendar text-secondary"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-top">
+            <div class="m-3">
+                <p-button type="submit" class="float-end mx-4" [rounded]="true" label="Guardar" severity="secondary"
+                    size="small" [disabled]="formEditProduct.invalid"></p-button>
+                <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
+                    (onClick)="closeDialogCreate()"></p-button>
+            </div>
+        </div>
+    </form>
+</p-dialog>
