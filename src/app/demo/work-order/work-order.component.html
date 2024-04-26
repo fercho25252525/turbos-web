@@ -1,6 +1,6 @@
 <div class="card">
     <p-toast position="bottom-center" [showTransformOptions]="'translateY(100%)'" [showTransitionOptions]="'1000ms'"
-    [hideTransitionOptions]="'1000ms'" [showTransformOptions]="'translateX(100%)'"></p-toast>
+        [hideTransitionOptions]="'1000ms'" [showTransformOptions]="'translateX(100%)'"></p-toast>
     <div class="row m-2 mt-4">
         <div class="col-md-4"></div>
         <div class="col-md-4">
@@ -10,235 +10,955 @@
             </span>
         </div>
         <div class="col-md-4">
-            <p-button class="float-end" [rounded]="true" label="Crear Cliente" (click)="showDialogCreate()"
+            <p-button class="float-end" [rounded]="true" label="Crear Orden" (click)="showDialogCreate()"
                 [raised]="true" severity="secondary"></p-button>
         </div>
     </div>
 
+    <div *ngIf="workOrder.length > 0">
+        <div class="mx-4">
+            <strong>{{ workOrder.length}} ordenes encontrados</strong>
+        </div>
+        <div class="row m-2 mt-4">
+            <div class="col-md-4 col-sm-6 p-2" *ngFor="let workOrder of workOrder">
+                <p-card header="" subheader="" [style]="{ width: '90%', height: '70%' }">
+                    <ng-template pTemplate="header">
+                        <div class="row">
+                            <div class="col-5">
+                                <div class="row ">
+                                    <div class="col-md-12">
+                                        <div class="car-plate">
+                                            <div class="plate-number">{{ workOrder.vehicle.plate.toLocaleUpperCase()}}
+                                            </div>
+                                            <div class="plate-city">{{ workOrder.vehicle.city.toLocaleUpperCase()}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-   
-
- <div *ngIf="customers.length > 0">
-    <div class="mx-4">
-        <strong>{{ customers.length}} clientes encontrados</strong>
-    </div>
-    <!-- width="67" height="80" -->
-
-    <div class="row m-2 mt-4">
-        <div class="col-md-4 col-sm-6 p-2" *ngFor="let customer of customers">           
-            <p-card header="" subheader="" [style]="{ width: '90%', height: '70%' }">
-                <ng-template pTemplate="header">
-                    <div class="row m-1">
-                        <div class="col-4">
-                            <p-image [src]="getImgUser(customer)" [style]="{'width': '80px', 'height': 'auto', 'max-width': '100%', 'border-radius': '50%'}" alt="Image" previewImageSizes="1000vw" [preview]="true"></p-image>
-                        </div>                
-                        
-                        <div class="col-8" style="font-size: 0.75rem;">
-                            <div>{{customer.name}} {{customer.lastName}}</div>
-                            <div>{{customer.documentNumber}}</div>
-                            <div>{{customer.email}}</div>
-                            <div class="mt-2 position-relative">
-                                <div class="position-absolute" style="right: 50; bottom: 0;">
-                                    <p-speedDial [model]="items!"  (onClick)="generateCommand(customer)" [mask]="true"  class="speeddial-right custom-icon" direction="right"></p-speedDial>
+                                <div class="d-flex justify-content-center">
+                                    <i class='fas fa-car-side' [style.color]="workOrder.vehicle.color"
+                                        style='font-size:48px; border: 3px solid #0000;'></i>
                                 </div>
                             </div>
-                        </div>                        
-                    </div>
-                </ng-template>
-            </p-card>
+
+                            <div class="col-7" style="font-size: 0.75rem;">
+                                <div>{{ workOrder.vehicle.customer.name }} {{ workOrder.vehicle.customer.lastName }}
+                                </div>
+                                <div>{{ workOrder.vehicle.customer.documentNumber }}</div>
+                                <div>Order: #{{ workOrder.idOrder }}</div>
+                                <div>{{ workOrder.statusOrder }}</div>
+                                <div>{{ workOrder.creationDate | date:'yyyy/MM/dd'}}</div>
+                                <div class="mt-2 position-relative">
+                                    <div class="position-absolute" style="right: 50; bottom: 0;">
+                                        <p-speedDial [model]="items!" (onClick)="generateCommand(workOrder)"
+                                            [mask]="true" class="speeddial-right custom-icon"
+                                            direction="right"></p-speedDial>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-card>
+            </div>
         </div>
     </div>
- </div>
 </div>
 
 
 
-<p-dialog header="Crear Cliente" [(visible)]="visibleModalCreate" [style]="{width: '45vw'}">
-    <form [formGroup]="formCreateCustomer" (ngSubmit)="createCustomer()">
-        <div class="container row">
-            <div *ngIf="isVisibilityMenssageCreate" class="col-md-12 alert alert-secondary alert-dismissible"
-                style="font-size: 0.81rem;" role="alert">
-                Todos los campos con (*) son obligatorios.
-                <button type="button" class="btn-close" (click)="showVisibilityMenssageCreate()" data-bs-dismiss="alert"
-                    aria-label="Close"></button>
-            </div>
+<p-dialog header="Crear Orden de Trabajo" [(visible)]="visibleModalCreate" [style]="{width: '70vw'}"
+    [contentStyle]="{'min-height': '390px'}">
+    <p-tabView #tabView [activeIndex]="selectedIndex">
 
-            <div class="col-md-4 mb-3">
-                <label for="inputName" class="col-sm-2 col-form-label">Nombre(*)</label>
-                <div class="col-sm-12">
-                    <input type="text" formControlName="name" class="form-control" id="inputName">
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="inputLastName" class="col-sm-2 col-form-label">Apellido(*)</label>
-                <div class="col-sm-12">
-                    <input type="text" formControlName="lastName" class="form-control" id="inputLastName">
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="inputDocument" class="col-sm-2 col-form-label">Documento(*)</label>
-                <div class="col-sm-12">
-                    <input type="text" formControlName="document" class="form-control" id="inputDocument">
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="inputEmail" class="col-sm-2 col-form-label">Correo(*)</label>
-                <div class="col-sm-12">
-                    <input type="email" formControlName="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                        class="form-control" id="inputEmail">
-                </div>
-            </div>
 
-            <div class="col-md-4 mb-3">
-                <label for="inputGender" class="col-sm-2 col-form-label">Género</label>
-                <div class="col-sm-12">
-                    <select class="form-select" formControlName="gender" aria-label="Default select example"
-                        id="inputGender">
-                        <option value="Hombre">Hombre</option>
-                        <option value="Mujer">Mujer</option>
-                        <option value="Indefinido">Indefinido</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="inputFirsthDate" class="col-sm-2 col-form-label">Dirección</label>
-                <div class="col-sm-12">
-                    <div class="input-group">
+
+
+
+
+
+
+
+
+
+
+
+
+        <p-tabPanel header="Cliente" [disabled]="true">
+            <form [formGroup]="formCreateCustomer" (ngSubmit)="createCustomer()">
+                <div class="container row">
+                    <div class="col-md-8 mb-3">
+                        <label for="inputGender" class="col-sm-2 col-form-label">Cliente</label>
                         <div class="col-sm-12">
-                            <input type="text" formControlName="address" class="form-control" id="inputDocument">
+                            <p-autoComplete [virtualScroll]="true" [disabled]="existClient"
+                                [ngModelOptions]="{standalone: true}" [suggestions]="filteredItems"
+                                [virtualScrollItemSize]="34" (completeMethod)="filterItems($event)" field="fullName"
+                                [dropdown]="true" [(ngModel)]="selectedItem" (onSelect)="onCustomerSelect($event)">
+                            </p-autoComplete>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="inputFirsthDate" class="col-sm-2 col-form-label">Teléfono(*)</label>
-                <div class="col-sm-12">
-                    <div class="input-group">
-                        <div class="col-sm-12">
-                            <p-inputMask mask="(999) 999-9999" formControlName="phone" placeholder="(999) 999-9999"></p-inputMask>
-                        </div>
+                    <div class="col-md-4 mt-3">
+                        <p-button class="float-end mt-1" [rounded]="true" [label]="nameButtonClient"
+                            (click)="flagCreateClient()" [disabled]="createCustomerFlag" [raised]="true"
+                            severity="secondary"></p-button>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4 mb-3">                
-            </div>
-            
-            <div class="col-md-7 mb-3">
-                <label for="inputFirsthDate" class="col-sm-2 col-form-label">Cargar Foto Perfil</label>
-                <div class="col-sm-12">
-                    <div class="input-group">
-                        <div class="input-group">
-                            <input type="file" formControlName="photo" (change)="onFileSelected($event)"
-                                accept="image/png, image/jpeg" class="form-control" id="inputGroupFile04"
-                                aria-describedby="inputGroupFileAddon04" aria-label="Upload">
-                        </div>
+                <!-- crear cliente -->
+                <div class="container row mt-2" *ngIf="existClient">
+                    <div *ngIf="isVisibilityMenssageCreate" class="col-md-12 alert alert-secondary alert-dismissible"
+                        style="font-size: 0.81rem;" role="alert">
+                        Todos los campos con (*) son obligatorios.
+                        <button type="button" class="btn-close" (click)="showVisibilityMenssageCreate()"
+                            data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="border-top">
-            <div class="m-3">
-                <p-button type="submit" class="float-end mx-4" [rounded]="true" label="Guardar" severity="secondary"
-                    size="small" [disabled]="formCreateCustomer.invalid"></p-button>
-                <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
-                    (onClick)="closeDialogCreate()"></p-button>
+                    <div class="col-md-4 mb-3">
+                        <label for="inputName" class="col-sm-2 col-form-label">Nombre(*)</label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="name" class="form-control" id="inputName">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="inputLastName" class="col-sm-2 col-form-label">Apellido(*)</label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="lastName" class="form-control" id="inputLastName">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="inputDocument" class="col-sm-2 col-form-label">Documento(*)</label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="document" class="form-control" id="inputDocument">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="inputEmail" class="col-sm-2 col-form-label">Correo(*)</label>
+                        <div class="col-sm-12">
+                            <input type="email" formControlName="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                class="form-control" id="inputEmail">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="inputGender" class="col-sm-2 col-form-label">Género</label>
+                        <div class="col-sm-12">
+                            <select class="form-select" formControlName="gender" aria-label="Default select example"
+                                id="inputGender">
+                                <option value="Hombre">Hombre</option>
+                                <option value="Mujer">Mujer</option>
+                                <option value="Indefinido">Indefinido</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="inputFirsthDate" class="col-sm-2 col-form-label">Dirección</label>
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                <div class="col-sm-12">
+                                    <input type="text" formControlName="address" class="form-control"
+                                        id="inputDocument">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="inputFirsthDate" class="col-sm-2 col-form-label">Teléfono(*)</label>
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                <div class="col-sm-12">
+                                    <p-inputMask mask="(999) 999-9999" formControlName="phone"
+                                        placeholder="(999) 999-9999"></p-inputMask>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                    </div>
+
+                    <div class="col-md-7 mb-3" *ngIf="!createCustomerFlag">
+                        <label for="inputFirsthDate" class="col-sm-2 col-form-label">Cargar Foto Perfil</label>
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group">
+                                    <input type="file" formControlName="photo" (change)="onFileSelected($event)"
+                                        accept="image/png, image/jpeg" class="form-control" id="inputGroupFile04"
+                                        aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-top">
+                        <div class="" *ngIf="buttonCreateUser">
+                            <p-button type="submit" [disabled]="!selectedCustomer || formCreateCustomer.invalid"
+                                class="float-end mx-4" [rounded]="true" label="Crear Cliente" severity="secondary"
+                                size="small"></p-button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+            <div class="container row">
+
             </div>
-        </div>
-    </form>
+
+            <div class="border-top mt-2">
+                <div class="m-3">
+                    <p-button type="submit" class="float-end mx-4" [disabled]="selectedCustomer"
+                        (click)="irAlSegundoTab(1)" [rounded]="true" label="Siguiente" severity="secondary"
+                        size="small"></p-button>
+                    <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
+                        (onClick)="closeDialogCreate()"></p-button>
+                </div>
+            </div>
+        </p-tabPanel>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- 2 -->
+        <p-tabPanel header="Vehículo" [disabled]="true">
+            <form [formGroup]="formCreateVehicle" (ngSubmit)="createVehicle()">
+                <div class="container row">
+                    <div class="col-md-8 mb-3">
+                        <label for="inputGender" class="col-sm-2 col-form-label">Vehiculo</label>
+                        <div class="col-sm-12">
+                            <p-autoComplete [virtualScroll]="true" [disabled]="existVehicle"
+                                [ngModelOptions]="{standalone: true}" [suggestions]="filteredItemsVehicle"
+                                [virtualScrollItemSize]="34" (completeMethod)="filterItemsVehicle($event)" field="plate"
+                                [dropdown]="true" [(ngModel)]="selectedItemVehicle"
+                                (onSelect)="onVehicleSelect($event)">
+                            </p-autoComplete>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-3">
+                        <p-button class="float-end mt-1" [rounded]="true" [label]="nameButtonVehicle"
+                            (click)="flagCreateVehicle()" [disabled]="createVehicleFlag" [raised]="true"
+                            severity="secondary"></p-button>
+                    </div>
+                </div>
+                <!-- crear vehicle -->
+                <div class="container row mt-2" *ngIf="existVehicle">
+                    <div *ngIf="isVisibilityMenssageCreate" class="col-md-12 alert alert-secondary alert-dismissible"
+                        style="font-size: 0.81rem;" role="alert">
+                        Todos los campos con (*) son obligatorios.
+                        <button type="button" class="btn-close" (click)="showVisibilityMenssageCreate()"
+                            data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="plate" class="col-sm-2 col-form-label">Placa(*)</label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="plate" class="form-control" id="plate">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="city" class="col-sm-2 col-form-label">Ciudad(*)</label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="city" class="form-control" id="city">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="brand" class="col-sm-2 col-form-label">Marca(*)</label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="brand" class="form-control" id="brand">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="model" class="col-sm-2 col-form-label">Modelo(*)</label>
+                        <div class="col-sm-12">
+                            <select class="form-select" formControlName="model" formControlName="model"
+                                aria-label="Default select example">
+                                <option value="" disabled selected>Selecciona un año</option>
+                                <option *ngFor="let year of yearsList" [value]="year">{{ year }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="status" class="col-sm-2 col-form-label">Estado</label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="status" class="form-control" id="status">
+                        </div>
+                    </div>
+                    <div class="col-md-1 mb-3">
+                        <label for="color" class="col-sm-2 col-form-label">Color</label>
+                        <div class="col-sm-12">
+                            <p-colorPicker formControlName="color" id="color"></p-colorPicker>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="typeVehicle" class="col-sm-2 col-form-label">Tipo Vehiculo(*)</label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="typeVehicle" class="form-control" id="typeVehicle">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="typeFuels" class="col-sm-2 col-form-label">Tipo Combustible(*)</label>
+                        <div class="col-sm-12">
+                            <select class="form-select" formControlName="typeFuels" formControlName="typeFuels"
+                                aria-label="Default select example">
+                                <option value="" disabled selected>Selecciona un combustible</option>
+                                <option value="Gasolina">Gasolina</option>
+                                <option value="Diesel">Diésel</option>
+                                <option value="Biodiesel">Biodiésel</option>
+                                <option value="GasNatural">Gas natural</option>
+                                <option value="GLP">GLP</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="inputFirsthDate" class="col-sm-2 col-form-label">Siguiente Mantenimiento</label>
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                <input formControlName="nextMaintenanceDate" class="form-control"
+                                    placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker"
+                                    id="inputFirsthDate" />
+                                <button class="btn button-calendar  bi bi-calendar3" (click)="d.toggle()"
+                                    type="button"><i class="feather icon-calendar text-secondary"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-top">
+                        <div class="" *ngIf="buttonCreateVehicle">
+                            <p-button type="submit" [disabled]="!selectedVehicle || formCreateVehicle.invalid"
+                                class="float-end mx-4" [rounded]="true" label="Crear Vehiculo" severity="secondary"
+                                size="small"></p-button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+            <div class="container row">
+            </div>
+
+            <div class="border-top mt-2">
+                <div class="m-3">
+                    <p-button type="submit" class="float-end mx-2" [disabled]="selectedVehicle"
+                        (click)="irAlSegundoTab(2)" [rounded]="true" label="Siguiente" severity="secondary"
+                        size="small"></p-button>
+                    <p-button class="float-end mx-2" label="Atras" severity="secondary" size="small"
+                        (click)="irAlSegundoTab(0)"></p-button>
+                    <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
+                        (onClick)="closeDialogCreate()"></p-button>
+                </div>
+            </div>
+        </p-tabPanel>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- 3 -->
+        <p-tabPanel header="Orden de Trabajo" [disabled]="true">
+            <form [formGroup]="formCreateOrder" (ngSubmit)="createOrder()">
+                <!-- crear vehicle -->
+                <div class="container row mt-2" *ngIf="existVehicle">
+                    <div *ngIf="isVisibilityMenssageCreate" class="col-md-12 alert alert-secondary alert-dismissible"
+                        style="font-size: 0.81rem;" role="alert">
+                        Todos los campos con (*) son obligatorios.
+                        <button type="button" class="btn-close" (click)="showVisibilityMenssageCreate()"
+                            data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="estimatedCost" class="col-sm-2 col-form-label">estimatedCost(*)</label>
+                        <div class="col-sm-12">
+                            <p-inputNumber formControlName="estimatedCost" inputId="currency-cop"
+                                [minFractionDigits]="0" mode="currency" currency="COP" locale="es-CO"> </p-inputNumber>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="startDate" class="col-sm-2 col-form-label">startDate(*)</label>
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                <input formControlName="startDate" class="form-control" placeholder="yyyy-mm-dd"
+                                    name="dp" ngbDatepicker #d="ngbDatepicker" id="startDate" />
+                                <button class="btn button-calendar  bi bi-calendar3" (click)="d.toggle()"
+                                    type="button"><i class="feather icon-calendar text-secondary"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="endDate" class="col-sm-2 col-form-label">endDate(*)</label>
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                <input formControlName="endDate" class="form-control" placeholder="yyyy-mm-dd" name="dp"
+                                    ngbDatepicker #d2="ngbDatepicker" id="endDate" />
+                                <button class="btn button-calendar  bi bi-calendar3" (click)="d2.toggle()"
+                                    type="button"><i class="feather icon-calendar text-secondary"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="comments" class="col-sm-2 col-form-label">comments</label>
+                        <div class="col-sm-12">
+                            <textarea class="form-control" width="100px" formControlName="comments"
+                                aria-label="With textarea"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+            <div class="container row">
+            </div>
+
+            <div class="border-top mt-2">
+                <div class="m-3">
+                    <p-button type="submit" class="float-end mx-2" [disabled]="formCreateOrder.invalid"
+                        (click)="createOrder()" [rounded]="true" label="Siguiente" severity="secondary"
+                        size="small"></p-button>
+                    <p-button class="float-end mx-2" label="Atras" severity="secondary" size="small"
+                        (click)="irAlSegundoTab(1)"></p-button>
+                    <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
+                        (onClick)="closeDialogCreate()"></p-button>
+                </div>
+            </div>
+        </p-tabPanel>
+
+
+
+
+
+
+
+
+        <p-tabPanel header="Descripción" [disabled]="true">
+            <div class="card flex flex-wrap gap-3 ">
+                <div class="row m-2">
+                    <div class="col-md-5 p-2 border-1 surface-border border-round w-15rem" pDroppable
+                        (onDrop)="dropAvailable($event)">
+                        <ul class="list-none flex flex-column gap-2 p-0 m-0">
+                            <li *ngFor="let product of availableProducts" class="p-2 border-round shadow-1" pDraggable
+                                (onDragStart)="dragStart($event, product)" (onDragEnd)="dragEnd()">
+                                {{ product.typeWork }} - ${{ product.coste }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-7 p-2 border-1 surface-border border-round w-15rem" pDroppable
+                        (onDrop)="dropSelected($event)">
+                        <p class="text-center surface-border border-bottom-1">Drop Zone</p>
+                        <form [formGroup]="formCreateOrderDescription">
+                            <ul class="list-none flex flex-column gap-2 p-0 m-0">
+                                <li *ngFor="let product of selectedProducts" class="p-2 border-round shadow-1"
+                                    pDraggable (onDragStart)="dragStart($event, product)" (onDragEnd)="dragEnd()">
+                                    <div class="row">
+                                        <div class="col-md-6 mt-4">
+                                            <div>{{ product.typeWork }} - ${{ product.coste }} </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="mechanic{{ product.idWork }}">Mecánico:</label>
+                                            <select id="mechanic{{ product.idWork }}" class="form-select"
+                                                (change)="updateDetails(product)" formControlName="mechanic">
+                                                <option *ngFor="let mecan of mecanic" [ngValue]="mecan">{{
+                                                    mecan.userName }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container row">
+            </div>
+
+            <div class="border-top mt-2">
+                <div class="m-3">
+                    <p-button type="submit" class="float-end mx-2" [disabled]="formCreateOrderDescription.invalid"
+                        (click)="createOrderDetail()" [rounded]="true" label="Crear Orden" severity="secondary"
+                        size="small"></p-button>
+                    <p-button class="float-end mx-2" label="Atras" severity="secondary" size="small"
+                        (click)="irAlSegundoTab(2)"></p-button>
+                    <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
+                        (onClick)="closeDialogCreate()"></p-button>
+                </div>
+            </div>
+        </p-tabPanel>
+    </p-tabView>
 </p-dialog>
 
-<p-dialog header="Editar Cliente" [(visible)]="visibleModalEdit" [style]="{width: '45vw'}">
-    <form [formGroup]="formEditCustomer" (ngSubmit)="editCustomer()">
-        <div class="container row">
-            <div *ngIf="isVisibilityMenssageEdit" class="col-md-12 alert alert-secondary alert-dismissible"
-                style="font-size: 0.81rem;" role="alert">
-                Todos los campos con (*) son obligatorios.
-                <button type="button" class="btn-close" (click)="showVisibilityMenssageEdit()" data-bs-dismiss="alert"
-                    aria-label="Close"></button>
-            </div>
 
-            <div class="col-md-4 mb-3">
-                <label for="inputName" class="col-sm-2 col-form-label">Nombre(*)</label>
-                <div class="col-sm-12">
-                    <input type="text" formControlName="name" class="form-control" id="inputName">
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="inputLastName" class="col-sm-2 col-form-label">Apellido(*)</label>
-                <div class="col-sm-12">
-                    <input type="text" formControlName="lastName" class="form-control" id="inputLastName">
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="inputDocument" class="col-sm-2 col-form-label">Documento(*)</label>
-                <div class="col-sm-12">
-                    <input type="text" formControlName="document" class="form-control" id="inputDocument">
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="inputEmail" class="col-sm-2 col-form-label">Correo(*)</label>
-                <div class="col-sm-12">
-                    <input type="email" formControlName="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                        class="form-control" id="inputEmail">
-                </div>
-            </div>
 
-            <div class="col-md-4 mb-3">
-                <label for="inputGender" class="col-sm-2 col-form-label">Género</label>
-                <div class="col-sm-12">
-                    <select class="form-select" formControlName="gender" aria-label="Default select example"
-                        id="inputGender">
-                        <option value="Hombre">Hombre</option>
-                        <option value="Mujer">Mujer</option>
-                        <option value="Indefinido">Indefinido</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="inputFirsthDate" class="col-sm-2 col-form-label">Dirección</label>
-                <div class="col-sm-12">
-                    <div class="input-group">
+
+
+
+<!-- actualizar toda la orden -->
+<!-- actualizar toda la orden -->
+<!-- actualizar toda la orden -->
+<!-- actualizar toda la orden -->
+<!-- actualizar toda la orden -->
+<!-- actualizar toda la orden -->
+<!-- actualizar toda la orden -->
+<!-- actualizar toda la orden -->
+<!-- actualizar toda la orden -->
+<!-- actualizar toda la orden -->
+<!-- actualizar toda la orden -->
+<!-- actualizar toda la orden -->
+
+
+<p-dialog header="Crear Orden de Trabajo" [(visible)]="visibleModalEdit" [style]="{width: '70vw'}"
+    [contentStyle]="{'min-height': '390px'}">
+    <p-tabView #tabView [activeIndex]="selectedIndex">
+
+
+
+
+
+
+
+        <p-tabPanel header="Cliente" [disabled]="true">
+            <form [formGroup]="formEditCustomer" (ngSubmit)="createCustomer()">
+                <div class="container row">
+                    <div class="col-md-8 mb-3">
+                        <label for="inputGender" class="col-sm-2 col-form-label">Cliente</label>
                         <div class="col-sm-12">
-                            <input type="text" formControlName="address" class="form-control" id="inputDocument">
+                            <p-autoComplete [virtualScroll]="true" [disabled]="existClientEdit"
+                                [ngModelOptions]="{standalone: true}" [suggestions]="filteredItems"
+                                [virtualScrollItemSize]="34" (completeMethod)="filterItems($event)" field="fullName"
+                                [dropdown]="true" [(ngModel)]="selectedItem" (onSelect)="onCustomerSelect($event)">
+                            </p-autoComplete>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <label for="inputFirsthDate" class="col-sm-2 col-form-label">Teléfono(*)</label>
-                <div class="col-sm-12">
-                    <div class="input-group">
-                        <div class="col-sm-12">
-                            <p-inputMask mask="(999) 999-9999" formControlName="phone" placeholder="(999) 999-9999"></p-inputMask>
-                        </div>
+                    <div class="col-md-4 mt-3">
+                        <p-button class="float-end mt-1" [rounded]="true" [label]="nameButtonClientEdit"
+                            (click)="flagCreateClient()" [disabled]="EditCustomerFlag" [raised]="true"
+                            severity="secondary"></p-button>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4 mb-3">                
-            </div>
-            
-            <div class="col-md-7 mb-3">
-                <label for="inputFirsthDate" class="col-sm-2 col-form-label">Cargar Foto Perfil</label>
-                <div class="col-sm-12">
-                    <div class="input-group">
-                        <div class="input-group">
-                            <input type="file" formControlName="photo" (change)="onFileSelected($event)"
-                                accept="image/png, image/jpeg" class="form-control" id="inputGroupFile04"
-                                aria-describedby="inputGroupFileAddon04" aria-label="Upload">
-                        </div>
+                <!-- crear cliente -->
+                <div class="container row mt-2" *ngIf="!existClientEdit">
+                    <div *ngIf="isVisibilityMenssageCreate" class="col-md-12 alert alert-secondary alert-dismissible"
+                        style="font-size: 0.81rem;" role="alert">
+                        Todos los campos con (*) son obligatorios.
+                        <button type="button" class="btn-close" (click)="showVisibilityMenssageCreate()"
+                            data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="border-top">
-            <div class="m-3">
-                <p-button type="submit" class="float-end mx-4" [rounded]="true" label="Guardar" severity="secondary"
-                    size="small" [disabled]="formEditCustomer.invalid"></p-button>
-                <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
-                    (onClick)="closeDialogEdit()"></p-button>
+                    <div class="col-md-4 mb-3">
+                        <label for="inputName" class="col-sm-2 col-form-label">Nombre(*)</label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="name" class="form-control" id="inputName">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="inputLastName" class="col-sm-2 col-form-label">Apellido(*)</label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="lastName" class="form-control" id="inputLastName">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="inputDocument" class="col-sm-2 col-form-label">Documento(*)</label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="document" class="form-control" id="inputDocument">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="inputEmail" class="col-sm-2 col-form-label">Correo(*)</label>
+                        <div class="col-sm-12">
+                            <input type="email" formControlName="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                                class="form-control" id="inputEmail">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="inputGender" class="col-sm-2 col-form-label">Género</label>
+                        <div class="col-sm-12">
+                            <select class="form-select" formControlName="gender" aria-label="Default select example"
+                                id="inputGender">
+                                <option value="Hombre">Hombre</option>
+                                <option value="Mujer">Mujer</option>
+                                <option value="Indefinido">Indefinido</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="inputFirsthDate" class="col-sm-2 col-form-label">Dirección</label>
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                <div class="col-sm-12">
+                                    <input type="text" formControlName="address" class="form-control"
+                                        id="inputDocument">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="inputFirsthDate" class="col-sm-2 col-form-label">Teléfono(*)</label>
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                <div class="col-sm-12">
+                                    <p-inputMask mask="(999) 999-9999" formControlName="phone"
+                                        placeholder="(999) 999-9999"></p-inputMask>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                    </div>
+
+                    <div class="col-md-7 mb-3" *ngIf="!selectedCustomerEdit">
+                        <label for="inputFirsthDate" class="col-sm-2 col-form-label">Cargar Foto Perfil</label>
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                <div class="input-group">
+                                    <input type="file" formControlName="photo" (change)="onFileSelected($event)"
+                                        accept="image/png, image/jpeg" class="form-control" id="inputGroupFile04"
+                                        aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-top">
+                        <div class="" *ngIf="buttonEditUser">
+                            <p-button type="submit" [disabled]="!selectedCustomerEdit && formEditCustomer.invalid"
+                                class="float-end mx-4" [rounded]="true" label="Editar Cliente" severity="secondary"
+                                size="small"></p-button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+            <div class="container row">
+
             </div>
-        </div>
-    </form>
+
+            <div class="border-top mt-2">
+                <div class="m-3">
+                    <p-button type="submit" class="float-end mx-4" [disabled]="!selectedCustomerEdit"
+                        (click)="irAlSegundoTab(1)" [rounded]="true" label="Siguiente" severity="secondary"
+                        size="small"></p-button>
+                    <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
+                        (onClick)="closeDialogEdit()"></p-button>
+                </div>
+            </div>
+        </p-tabPanel>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- 2 -->
+        <p-tabPanel header="Vehículo" [disabled]="true">
+            <form [formGroup]="formEditVehicle" (ngSubmit)="createVehicle()">
+                <div class="container row">
+                    <div class="col-md-8 mb-3">
+                        <label for="inputGender" class="col-sm-2 col-form-label">Vehiculo</label>
+                        <div class="col-sm-12">
+                            <p-autoComplete [virtualScroll]="true" [disabled]="existVehicleEdit"
+                                [ngModelOptions]="{standalone: true}" [suggestions]="filteredItemsVehicle"
+                                [virtualScrollItemSize]="34" (completeMethod)="filterItemsVehicle($event)" field="plate"
+                                [dropdown]="true" [(ngModel)]="selectedItemVehicle"
+                                (onSelect)="onVehicleSelect($event)">
+                            </p-autoComplete>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mt-3">
+                        <p-button class="float-end mt-1" [rounded]="true" [label]="nameButtonVehicle"
+                            (click)="flagCreateVehicle()" [disabled]="createVehicleFlag" [raised]="true"
+                            severity="secondary"></p-button>
+                    </div>
+                </div>
+                <!-- crear vehicle -->
+                <div class="container row mt-2" *ngIf="!existVehicleEdit">
+                    <div *ngIf="isVisibilityMenssageCreate" class="col-md-12 alert alert-secondary alert-dismissible"
+                        style="font-size: 0.81rem;" role="alert">
+                        Todos los campos con (*) son obligatorios.
+                        <button type="button" class="btn-close" (click)="showVisibilityMenssageCreate()"
+                            data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="plate" class="col-sm-2 col-form-label">Placa(*)</label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="plate" class="form-control" id="plate">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="city" class="col-sm-2 col-form-label">Ciudad(*)</label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="city" class="form-control" id="city">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="brand" class="col-sm-2 col-form-label">Marca(*)</label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="brand" class="form-control" id="brand">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="model" class="col-sm-2 col-form-label">Modelo(*)</label>
+                        <div class="col-sm-12">
+                            <select class="form-select" formControlName="model" formControlName="model"
+                                aria-label="Default select example">
+                                <option value="" disabled selected>Selecciona un año</option>
+                                <option *ngFor="let year of yearsList" [value]="year">{{ year }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="status" class="col-sm-2 col-form-label">Estado</label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="status" class="form-control" id="status">
+                        </div>
+                    </div>
+                    <div class="col-md-1 mb-3">
+                        <label for="color" class="col-sm-2 col-form-label">Color</label>
+                        <div class="col-sm-12">
+                            <p-colorPicker formControlName="color" id="color"></p-colorPicker>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="typeVehicle" class="col-sm-2 col-form-label">Tipo Vehiculo(*)</label>
+                        <div class="col-sm-12">
+                            <input type="text" formControlName="typeVehicle" class="form-control" id="typeVehicle">
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="typeFuels" class="col-sm-2 col-form-label">Tipo Combustible(*)</label>
+                        <div class="col-sm-12">
+                            <select class="form-select" formControlName="typeFuels" formControlName="typeFuels"
+                                aria-label="Default select example">
+                                <option value="" disabled selected>Selecciona un combustible</option>
+                                <option value="Gasolina">Gasolina</option>
+                                <option value="Diesel">Diésel</option>
+                                <option value="Biodiesel">Biodiésel</option>
+                                <option value="GasNatural">Gas natural</option>
+                                <option value="GLP">GLP</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="inputFirsthDate" class="col-sm-2 col-form-label">Siguiente Mantenimiento</label>
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                <input formControlName="nextMaintenanceDate" class="form-control"
+                                    placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #d="ngbDatepicker"
+                                    id="inputFirsthDate" />
+                                <button class="btn button-calendar  bi bi-calendar3" (click)="d.toggle()"
+                                    type="button"><i class="feather icon-calendar text-secondary"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-top">
+                        <div class="" *ngIf="!buttonCreateVehicleEdit">
+                            <p-button type="submit" [disabled]="!selectedVehicle || formCreateVehicle.invalid"
+                                class="float-end mx-4" [rounded]="true" label="Crear Vehiculo" severity="secondary"
+                                size="small"></p-button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+            <div class="container row">
+            </div>
+
+            <div class="border-top mt-2">
+                <div class="m-3">
+                    <p-button type="submit" class="float-end mx-2" [disabled]="selectedVehicle"
+                        (click)="irAlSegundoTab(2)" [rounded]="true" label="Siguiente" severity="secondary"
+                        size="small"></p-button>
+                    <p-button class="float-end mx-2" label="Atras" severity="secondary" size="small"
+                        (click)="irAlSegundoTab(0)"></p-button>
+                    <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
+                        (onClick)="closeDialogEdit()"></p-button>
+                </div>
+            </div>
+        </p-tabPanel>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- 3 -->
+        <p-tabPanel header="Orden de Trabajo" [disabled]="true">
+            <form [formGroup]="formCreateOrder" (ngSubmit)="createOrder()">
+                <!-- crear vehicle -->
+                <div class="container row mt-2" *ngIf="existVehicle">
+                    <div *ngIf="isVisibilityMenssageCreate" class="col-md-12 alert alert-secondary alert-dismissible"
+                        style="font-size: 0.81rem;" role="alert">
+                        Todos los campos con (*) son obligatorios.
+                        <button type="button" class="btn-close" (click)="showVisibilityMenssageCreate()"
+                            data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="estimatedCost" class="col-sm-2 col-form-label">estimatedCost(*)</label>
+                        <div class="col-sm-12">
+                            <p-inputNumber formControlName="estimatedCost" inputId="currency-cop"
+                                [minFractionDigits]="0" mode="currency" currency="COP" locale="es-CO"> </p-inputNumber>
+
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="startDate" class="col-sm-2 col-form-label">startDate(*)</label>
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                <input formControlName="startDate" class="form-control" placeholder="yyyy-mm-dd"
+                                    name="dp" ngbDatepicker #d="ngbDatepicker" id="startDate" />
+                                <button class="btn button-calendar  bi bi-calendar3" (click)="d.toggle()"
+                                    type="button"><i class="feather icon-calendar text-secondary"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="endDate" class="col-sm-2 col-form-label">endDate(*)</label>
+                        <div class="col-sm-12">
+                            <div class="input-group">
+                                <input formControlName="endDate" class="form-control" placeholder="yyyy-mm-dd" name="dp"
+                                    ngbDatepicker #d2="ngbDatepicker" id="endDate" />
+                                <button class="btn button-calendar  bi bi-calendar3" (click)="d2.toggle()"
+                                    type="button"><i class="feather icon-calendar text-secondary"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="comments" class="col-sm-2 col-form-label">comments</label>
+                        <div class="col-sm-12">
+                            <textarea class="form-control" width="100px" formControlName="comments"
+                                aria-label="With textarea"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+            <div class="container row">
+            </div>
+
+            <div class="border-top mt-2">
+                <div class="m-3">
+                    <p-button type="submit" class="float-end mx-2" [disabled]="formCreateOrder.invalid"
+                        (click)="createOrder()" [rounded]="true" label="Siguiente" severity="secondary"
+                        size="small"></p-button>
+                    <p-button class="float-end mx-2" label="Atras" severity="secondary" size="small"
+                        (click)="irAlSegundoTab(1)"></p-button>
+                    <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
+                        (onClick)="closeDialogEdit()"></p-button>
+                </div>
+            </div>
+        </p-tabPanel>
+
+
+
+
+
+
+
+
+        <p-tabPanel header="Descripción" [disabled]="true">
+            <div class="card flex flex-wrap gap-3 ">
+                <div class="row m-2">
+                    <div class="col-md-5 p-2 border-1 surface-border border-round w-15rem" pDroppable
+                        (onDrop)="dropAvailable($event)">
+                        <ul class="list-none flex flex-column gap-2 p-0 m-0">
+                            <li *ngFor="let product of availableProducts" class="p-2 border-round shadow-1" pDraggable
+                                (onDragStart)="dragStart($event, product)" (onDragEnd)="dragEnd()">
+                                {{ product.typeWork }} - ${{ product.coste }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-7 p-2 border-1 surface-border border-round w-15rem" pDroppable
+                        (onDrop)="dropSelected($event)">
+                        <p class="text-center surface-border border-bottom-1">Drop Zone</p>
+                        <form [formGroup]="formCreateOrderDescription">
+                            <ul class="list-none flex flex-column gap-2 p-0 m-0">
+                                <li *ngFor="let product of selectedProducts" class="p-2 border-round shadow-1"
+                                    pDraggable (onDragStart)="dragStart($event, product)" (onDragEnd)="dragEnd()">
+                                    <div class="row">
+                                        <div class="col-md-6 mt-4">
+                                            <div>{{ product.typeWork }} - ${{ product.coste }} </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="mechanic{{ product.idWork }}">Mecánico:</label>
+                                            <select id="mechanic{{ product.idWork }}" class="form-select"
+                                                (change)="updateDetails(product)" formControlName="mechanic">
+                                                <option *ngFor="let mecan of mecanic" [ngValue]="mecan">{{
+                                                    mecan.userName }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container row">
+            </div>
+
+            <div class="border-top mt-2">
+                <div class="m-3">
+                    <p-button type="submit" class="float-end mx-2" [disabled]="formCreateOrderDescription.invalid"
+                        (click)="createOrderDetail()" [rounded]="true" label="Crear Orden" severity="secondary"
+                        size="small"></p-button>
+                    <p-button class="float-end mx-2" label="Atras" severity="secondary" size="small"
+                        (click)="irAlSegundoTab(2)"></p-button>
+                    <p-button class="float-end" label="Cancelar" severity="secondary" size="small"
+                        (onClick)="closeDialogCreate()"></p-button>
+                </div>
+            </div>
+        </p-tabPanel>
+    </p-tabView>
 </p-dialog>

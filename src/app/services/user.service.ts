@@ -9,8 +9,6 @@ import { environment } from 'src/environments/environment';
 })
 export class UserService {
 
-
-
   constructor(private http: HttpClient) { }
 
   getUsers(): Observable<{ data: User[] }> {
@@ -44,5 +42,9 @@ export class UserService {
 
   getImage(userName: string): Observable<Blob> {
     return this.http.get(`${environment.apiUrl}/userController/v1/sendImage/${userName}`, { responseType: 'blob' });
+  }
+
+  getMecanic(): Observable<{ data: User[] }> {
+    return this.http.get<{ data: User[] }>(`${environment.apiUrl}/userController/v1/getMecanic`);
   }
 }

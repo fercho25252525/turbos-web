@@ -219,3 +219,28 @@ a {
       font-size: 0.7rem; /* Tamaño del icono para pantallas muy grandes */
   }
 }
+
+
+.p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  color: #020202!important;
+  border-color: #4e48a8;
+  background: #f9f9f9ec;
+}
+
+.p-tabview .p-tabview-nav li .p-tabview-nav-link {
+  color: #a8a8a8 !important;
+  background: #f9f9f9ec;
+}
+
+
+.p-button {
+  color: #ffffff;
+  background: #3f4c63;
+  border: 1px solid #252629;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.9rem;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  border-radius: 6px;
+  height: 2.5rem;
+}
+

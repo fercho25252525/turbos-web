@@ -52,6 +52,20 @@ export class Customer {
     phone!: string;
     address!:string;
     photo!: string;
+ 
+    constructor(name: string, lastName: string, email: string, documentNumber: string, gender: string, phone: string, address: string) {
+        this.name = name;
+        this.lastName = lastName
+        this.email = email
+        this.documentNumber = documentNumber;
+        this.gender = gender
+        this.phone = phone
+        this.address = address
+      }
+
+    get fullName(): string {
+        return `${this.name} ${this.lastName} (${this.documentNumber})`;
+      }
 }
 export class CustomerAdd {
     userName!: string;

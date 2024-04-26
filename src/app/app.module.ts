@@ -40,6 +40,10 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
 import { SpeedDialModule } from 'primeng/speeddial';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { TabViewModule } from 'primeng/tabview';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ColorPickerModule } from 'primeng/colorpicker';
+import { DragDropModule } from 'primeng/dragdrop';
 
 import UserComponent from './demo/management-user/user/user.component';
 import CustomerComponent from './demo/management-user/customer/customer.component';
@@ -96,7 +100,11 @@ registerLocaleData(localeEs);
     InputTextModule,
     InputMaskModule,
     SpeedDialModule,
-    InputNumberModule
+    InputNumberModule,
+    TabViewModule,
+    AutoCompleteModule,
+    ColorPickerModule,
+    DragDropModule
   ],
   providers: [MessageService,ConfirmationService],
   bootstrap: [AppComponent]
