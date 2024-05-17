@@ -19,7 +19,7 @@ export class WorkOrderAdd {
     statusOrder!: string;
     estimatedCost!: number;
     realCost!: number;
-    startDate!: string | Date;;
+    startDate!: string | Date;
     endDate!: string | Date;;
     comments!: string;
     workDescription!: WorkDescription[] | undefined;

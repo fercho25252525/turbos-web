@@ -33,7 +33,6 @@ export default class WorkOrderComponent {
   selectedIndex: number = 0;
   existClient: boolean = false;
 
-
   // customer
   newCustomer!: CustomerAdd;
   formCreateCustomer!: FormGroup;
@@ -44,7 +43,7 @@ export default class WorkOrderComponent {
   selectedItem: Customer | null = null;
   filteredItems: Customer[] = [];
   allCustomers: Customer[] = [];
-  selectedFilter: 'document' | 'name' = 'document'; // Por defecto, filtrar por número de documento
+  selectedFilter: 'document' | 'name' = 'document';
   nameButtonClient = 'Crear Usuario';
   createCustomerFlag = false;
   buttonCreateUser = true;
@@ -55,6 +54,7 @@ export default class WorkOrderComponent {
   existVehicle: boolean = false;
   createVehicleFlag = false;
   nameButtonVehicle = 'Crear Vehiculo';
+  nameButtonVehicleEdit = 'Actualizar Vehiculo';
   selectedVehicle = true;
   buttonCreateVehicle = true;
   selectedItemVehicle: Vehicle | null = null;
@@ -69,44 +69,33 @@ export default class WorkOrderComponent {
   //OrdenDescription
   newOrderDescription!: WorkDescriptionAdd;
   formCreateOrderDescription!: FormGroup;
+  formCreateOrderDescriptionEdit!: FormGroup;
   availableProducts: WorkDescription[] | undefined;
   selectedProducts: WorkDescription[] | undefined;
+  selectedProductsEdit: WorkDescription[] | undefined;
   draggedProduct: WorkDescription | undefined | null;
   mecanic: User[] = [];
-
 
   //EditOrder
   editOrder!: WorkOrderEdit;
   existClientEdit: boolean = false;
 
   // customer
-
-  // newCustomer!: CustomerAdd;
   formEditCustomer!: FormGroup;
-  // isVisibilityMenssageCreate = true;
-  // isVisibilityMenssageEdit = true;
-  // selectedImage!: File | null;
   selectedCustomerEdit = true;
-  // selectedItem: Customer | null = null;
-  // filteredItems: Customer[] = [];
-  // allCustomers: Customer[] = [];
-  // selectedFilter: 'document' | 'name' = 'document'; // Por defecto, filtrar por número de documento
   nameButtonClientEdit = 'Actualizar Usuario';
   EditCustomerFlag = false;
   buttonEditUser = false;
 
   // Vehicle
-
-  // newVihicle!: VehicleAdd;
   formEditVehicle!: FormGroup;
   existVehicleEdit: boolean = false;
-  // createVehicleFlag = false;
-  // nameButtonVehicle = 'Crear Vehiculo';
+  filterVehicleEdit: boolean = false;
   selectedVehicleEdit = true;
   buttonCreateVehicleEdit = true;
-  // selectedItemVehicle: Vehicle | null = null;
-  // filteredItemsVehicle: Vehicle[] = [];
-  // allVehicle: Vehicle[] = [];
+
+  //Orden 
+  formEditOrder!: FormGroup;
 
   constructor(private fb: FormBuilder,
     private messageService: MessageService,
@@ -119,6 +108,10 @@ export default class WorkOrderComponent {
     this.formCreateOrderDescription = this.fb.group({
       mechanic: [''] // Campo de formulario para el mecánico (ejemplo)
     });
+    this.formCreateOrderDescriptionEdit = this.fb.group({
+      mechanic: [''] // Campo de formulario para el mecánico (ejemplo)
+    });
+
   }
 
   ngOnInit() {
@@ -131,7 +124,7 @@ export default class WorkOrderComponent {
     this.formGroupCreateVehicle();
     this.formGroupEditVehicle();
     this.formGroupCreateOrder();
-    // this.formGroupCreateOrderDescriptions();
+    this.formGroupEditOrder();
     this.getWorkOrder();
     this.getYearsRange()
     this.items = [
@@ -150,10 +143,10 @@ export default class WorkOrderComponent {
         styleClass: 'custom-icon',
         tooltip: 'Eliminar',
         command: () => {
-          this.customerservice.deleteUser(this.editOrder).subscribe(
+          this.workOrderService.deleteWorkOrder(this.editOrder).subscribe(
             res => {
               this.getWorkOrder();
-              this.messageService.add({ severity: 'info', summary: 'Confirmación', detail: `Se ha borrado el usuario ${this.editOrder.idOrder}` });
+              this.messageService.add({ severity: 'info', summary: 'Confirmación', detail: `Se ha borrado la orden de trabajo # ${this.editOrder.idOrder}` });
             },
             error => {
               this.messageService.add({ severity: 'error', summary: 'Error', detail: `${error.error.message}` });
@@ -186,7 +179,6 @@ export default class WorkOrderComponent {
     );
 
     console.log(this.mecanic);
-
   }
 
 
@@ -210,7 +202,6 @@ export default class WorkOrderComponent {
 
   dropAvailable(event: any) {
     if (this.draggedProduct) {
-      // Move from selectedProducts back to availableProducts
       if (!this.availableProducts!.includes(this.draggedProduct)) {
         this.selectedProducts = this.selectedProducts!.filter(p => p !== this.draggedProduct);
         this.availableProducts!.push(this.draggedProduct);
@@ -221,7 +212,6 @@ export default class WorkOrderComponent {
 
   dropSelected(event: any) {
     if (this.draggedProduct) {
-      // Move from availableProducts to selectedProducts
       if (!this.selectedProducts!.includes(this.draggedProduct)) {
         this.availableProducts = this.availableProducts!.filter(p => p !== this.draggedProduct);
         const selectedProductWithDetails: WorkDescription = { ...this.draggedProduct, mec: '' };
@@ -237,6 +227,24 @@ export default class WorkOrderComponent {
     const mechanicValue = this.formCreateOrderDescription.get('mechanic')?.value;
     if (mechanicValue) {
       product.mechanic = mechanicValue;
+      product.coste = product.coste
+      product.typeWork = product.typeWork
+    }
+
+    console.log(product);
+    this.formCreateOrderDescriptionEdit.reset()
+  }
+
+  updateDetailsEdit(product: WorkDescription) {
+    const mechanicValue = this.formCreateOrderDescriptionEdit.get('mechanic')?.value;
+
+    const mechanic = this.mecanic.filter(mechanc => mechanc.userName === mechanicValue)
+    console.log(this.mecanic);
+    // console.log(mechanicValue);
+    // console.log(mechanic);
+
+    if (mechanicValue) {
+      product.mechanic = mechanic[0];
       product.coste = product.coste
       product.typeWork = product.typeWork
     }
@@ -261,8 +269,6 @@ export default class WorkOrderComponent {
     for (let year = startYear; year <= currentYear; year++) {
       this.yearsList.push(year);
     }
-
-    console.log('Lista de años:', this.yearsList);
   }
 
   filterItems(event: any) {
@@ -280,13 +286,14 @@ export default class WorkOrderComponent {
   filterItemsVehicle(event: any) {
     const query = event.query.toLowerCase().trim();
 
-
+    console.log(this.allVehicle);
     this.filteredItemsVehicle = this.allVehicle.filter(
       (vehicle: Vehicle) => {
         const plate = vehicle.plate; // Acceder a fullName
         return plate.includes(query);
       }
     );
+
   }
 
 
@@ -316,19 +323,34 @@ export default class WorkOrderComponent {
   loadAllVehicle() {
     this.vehicleService.getVehicle().subscribe(
       (vehicle: { data: any[] }) => {
-        // Mapear los datos recibidos a instancias de Customer
         this.allVehicle = vehicle.data
       },
       (error) => {
-        console.error('Error al obtener clientes', error);
+        console.error('Error al obtener vehiculos', error);
         this.allVehicle = [];
       }
     );
   }
 
-  onCustomerSelect(event: any) {
+  onCustomerSelect(event: any, input: number) {
+    this.vehicleService.getVehicle().subscribe(
+      {
+        next: data => {
+          this.allVehicle = data.data
+        },
+        error: error => {
+          this.allVehicle = [];
+        },
+        complete: () => {
+          this.allVehicle = this.allVehicle.filter(vehicle => vehicle.customer.userName === this.newCustomer.userName);
+        }
+      }
+    );
+
     // El evento contiene el cliente seleccionado
     this.selectedItem = event.value;
+
+    this.selectedItemVehicle = null
 
     this.newCustomer = {
       userName: this.selectedItem?.documentNumber || '',
@@ -339,7 +361,21 @@ export default class WorkOrderComponent {
       gender: this.selectedItem?.gender || '',
       address: this.selectedItem?.address || '',
       phone: this.selectedItem?.phone || '',
+    };
+
+
+
+    if (input === 1) {
+      this.formEditVehicle.reset()
+      this.existVehicleEdit = true
+      this.filterVehicleEdit = true
     }
+
+    if (this.allVehicle.length === 0) {
+      this.filterVehicleEdit = false
+    }
+
+    console.log(this.allVehicle);
 
     this.formGroupCreateCustomer()
     this.existClient = true;
@@ -347,6 +383,19 @@ export default class WorkOrderComponent {
     this.buttonCreateUser = false
     this.selectedCustomer = false;
     this.irAlSegundoTab(1)
+    this.existVehicle = false
+    this.formGroupEditCustomer()
+    this.selectedItem = null
+
+    // this.loadAllVehicle()
+  }
+
+  nextCustomer() {
+    this.newCustomer = this.editOrder.vehicle.customer
+  }
+
+  nextVehicle() {
+    this.newVihicle = this.editOrder.vehicle
   }
 
   onVehicleSelect(event: any) {
@@ -372,6 +421,8 @@ export default class WorkOrderComponent {
     this.createVehicleFlag = false;
     this.buttonCreateVehicle = false
     this.selectedVehicle = false;
+    this.existVehicleEdit = !this.existVehicleEdit;
+    this.formGroupEditVehicle()
     this.irAlSegundoTab(2)
   }
 
@@ -379,19 +430,37 @@ export default class WorkOrderComponent {
 
     this.selectedIndex = index;
     this.tabView.activeIndex = this.selectedIndex;
+    // this.loadAllVehicle()
   }
 
   flagCreateClient() {
     this.selectedCustomer = true
     this.buttonCreateUser = true;
-    this.formCreateCustomer.reset();
+    this.selectedCustomerEdit = false
     this.existClient = !this.existClient;
+    this.buttonEditUser = true;
 
     if (!this.existClient) {
       this.nameButtonClient = 'Crear Usuario'
     } else {
       this.nameButtonClient = 'Seleccionar Usuario'
     }
+    this.formGroupEditCustomer()
+  }
+
+  flagEditClient() {
+    this.selectedCustomer = true
+    this.buttonCreateUser = true;
+    this.selectedCustomerEdit = !this.selectedCustomerEdit
+    this.existClient = !this.existClient;
+    this.buttonEditUser = !this.buttonEditUser;
+
+    if (!this.existClient) {
+      this.nameButtonClientEdit = 'Actualizar Usuario'
+    } else {
+      this.nameButtonClientEdit = 'Seleccionar Usuario'
+    }
+    this.formGroupEditCustomer()
   }
 
   flagCreateVehicle() {
@@ -401,10 +470,27 @@ export default class WorkOrderComponent {
     this.existVehicle = !this.existVehicle;
 
     if (!this.existVehicle) {
-      this.nameButtonVehicle = 'Crear Vehiculo'
+      this.nameButtonVehicle = 'crear Vehiculo'
     } else {
       this.nameButtonVehicle = 'Seleccionar Vehiculo'
     }
+    this.formGroupEditVehicle()
+  }
+
+  editCreateVehicle() {
+
+    this.selectedVehicleEdit = !this.selectedVehicleEdit;
+    this.buttonCreateVehicleEdit = !this.buttonCreateVehicleEdit;
+    this.formCreateVehicle.reset();
+    this.existVehicleEdit = !this.existVehicleEdit;
+    // this.filterVehicleEdit = !this.filterVehicleEdit;
+
+    if (!this.selectedVehicleEdit) {
+      this.nameButtonVehicleEdit = 'Actualizar Vehiculo'
+    } else {
+      this.nameButtonVehicleEdit = 'Seleccionar Vehiculo'
+    }
+    this.formGroupEditVehicle()
   }
 
   flagCreateOrder() {
@@ -423,7 +509,6 @@ export default class WorkOrderComponent {
 
   generateCommand(order: any) {
     this.editOrder = order;
-    console.log(this.editOrder);
   }
 
   getWorkOrder() {
@@ -433,15 +518,6 @@ export default class WorkOrderComponent {
           this.workOrder = data.data;
           console.log(this.workOrder);
 
-        },
-        error: error => {
-        },
-        complete: () => {
-          // this.customers.forEach(customer => {
-          //   this.getPhotoUser(customer.userName);
-          // });
-
-          // console.log(this.customers)
         }
       });
   }
@@ -462,19 +538,33 @@ export default class WorkOrderComponent {
 
 
   formGroupEditCustomer() {
-    console.log(this.editOrder);
+    this.newCustomer
 
     this.formEditCustomer = this.fb.group({
       name: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.customer.name : '', disabled: this.selectedCustomerEdit }, Validators.required],
       lastName: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.customer.lastName : '', disabled: this.selectedCustomerEdit }, Validators.required],
       username: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.customer.userName : '', disabled: this.selectedCustomerEdit }],
       email: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.customer.email : '', disabled: this.selectedCustomerEdit }, [Validators.required, Validators.email]],
-      document: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.customer.documentNumber : '', disabled: this.selectedCustomerEdit }, Validators.required],
+      document: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.customer.documentNumber : '', disabled: true }, Validators.required],
       gender: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.customer.gender : '', disabled: this.selectedCustomerEdit }],
       phone: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.customer.phone : '', disabled: this.selectedCustomerEdit }, Validators.required],
       address: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.customer.address : '', disabled: this.selectedCustomerEdit }],
       photo: [''],
     });
+
+    if (this.newCustomer !== null && this.newCustomer !== undefined) {
+      this.formEditCustomer = this.fb.group({
+        name: [{ value: this.editOrder !== undefined ? this.newCustomer.name : '', disabled: this.selectedCustomerEdit }, Validators.required],
+        lastName: [{ value: this.editOrder !== undefined ? this.newCustomer.lastName : '', disabled: this.selectedCustomerEdit }, Validators.required],
+        username: [{ value: this.editOrder !== undefined ? this.newCustomer.userName : '', disabled: this.selectedCustomerEdit }],
+        email: [{ value: this.editOrder !== undefined ? this.newCustomer.email : '', disabled: this.selectedCustomerEdit }, [Validators.required, Validators.email]],
+        document: [{ value: this.editOrder !== undefined ? this.newCustomer.documentNumber : '', disabled: true }, Validators.required],
+        gender: [{ value: this.editOrder !== undefined ? this.newCustomer.gender : '', disabled: this.selectedCustomerEdit }],
+        phone: [{ value: this.editOrder !== undefined ? this.newCustomer.phone : '', disabled: this.selectedCustomerEdit }, Validators.required],
+        address: [{ value: this.editOrder !== undefined ? this.newCustomer.address : '', disabled: this.selectedCustomerEdit }],
+        photo: [''],
+      });
+    }
   }
 
   formGroupCreateVehicle() {
@@ -492,17 +582,48 @@ export default class WorkOrderComponent {
   }
 
   formGroupEditVehicle() {
+    let nextMaintenanceDate = {}
+    const dateNext = this.editOrder !== undefined ? this.editOrder.vehicle.nextMaintenanceDate : null;
+
+    if (dateNext !== null && dateNext !== undefined) {
+      const fecha = new Date(dateNext.toString());
+      nextMaintenanceDate = { year: fecha.getFullYear(), month: fecha.getMonth() + 1, day: fecha.getDate() }
+    }
+
+
     this.formEditVehicle = this.fb.group({
-      plate: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.plate : '', disabled: this.formGroupEditVehicle }, Validators.required],
-      brand: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.brand : '', disabled: this.formGroupEditVehicle }, Validators.required],
-      color: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.color : '', disabled: this.formGroupEditVehicle }],
-      city: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.city : '', disabled: this.formGroupEditVehicle }, Validators.required],
-      model: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.model : '', disabled: this.formGroupEditVehicle }, Validators.required],
-      nextMaintenanceDate: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.nextMaintenanceDate : '', disabled: this.formGroupEditVehicle }],
-      status: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.status : '', disabled: this.formGroupEditVehicle }],
-      typeVehicle: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.typeVehicle : '', disabled: this.formGroupEditVehicle }, Validators.required],
-      typeFuels: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.typeFuels : '', disabled: this.formGroupEditVehicle }, Validators.required],
+      plate: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.plate : '', disabled: true }, Validators.required],
+      brand: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.brand : '', disabled: this.selectedVehicleEdit }, Validators.required],
+      color: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.color : '', disabled: this.selectedVehicleEdit }],
+      city: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.city : '', disabled: this.selectedVehicleEdit }, Validators.required],
+      model: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.model : '', disabled: this.selectedVehicleEdit }, Validators.required],
+      nextMaintenanceDate: [{ value: this.editOrder !== undefined ? nextMaintenanceDate : '', disabled: this.selectedVehicleEdit }],
+      status: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.status : '', disabled: this.selectedVehicleEdit }],
+      typeVehicle: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.typeVehicle : '', disabled: this.selectedVehicleEdit }, Validators.required],
+      typeFuels: [{ value: this.editOrder !== undefined ? this.editOrder.vehicle.typeFuels : '', disabled: this.selectedVehicleEdit }, Validators.required],
     });
+
+    if (this.newVihicle !== null && this.newVihicle !== undefined) {
+      const dateNext = this.newVihicle !== undefined ? this.newVihicle.nextMaintenanceDate : null;
+
+      if (dateNext !== null && dateNext !== undefined) {
+        const fecha = new Date(dateNext.toString());
+        nextMaintenanceDate = { year: fecha.getFullYear(), month: fecha.getMonth() + 1, day: fecha.getDate() }
+      }
+
+
+      this.formEditVehicle = this.fb.group({
+        plate: [{ value: this.newVihicle !== undefined ? this.newVihicle.plate : '', disabled: true }, Validators.required],
+        brand: [{ value: this.newVihicle !== undefined ? this.newVihicle.brand : '', disabled: this.selectedVehicleEdit }, Validators.required],
+        color: [{ value: this.newVihicle !== undefined ? this.newVihicle.color : '', disabled: this.selectedVehicleEdit }],
+        city: [{ value: this.newVihicle !== undefined ? this.newVihicle.city : '', disabled: this.selectedVehicleEdit }, Validators.required],
+        model: [{ value: this.newVihicle !== undefined ? this.newVihicle.model : '', disabled: this.selectedVehicleEdit }, Validators.required],
+        nextMaintenanceDate: [{ value: this.newVihicle !== undefined ? nextMaintenanceDate : '', disabled: this.selectedVehicleEdit }],
+        status: [{ value: this.newVihicle !== undefined ? this.newVihicle.status : '', disabled: this.selectedVehicleEdit }],
+        typeVehicle: [{ value: this.newVihicle !== undefined ? this.newVihicle.typeVehicle : '', disabled: this.selectedVehicleEdit }, Validators.required],
+        typeFuels: [{ value: this.newVihicle !== undefined ? this.newVihicle.typeFuels : '', disabled: this.selectedVehicleEdit }, Validators.required],
+      });
+    }
   }
 
   formGroupCreateOrder() {
@@ -516,11 +637,36 @@ export default class WorkOrderComponent {
     });
   }
 
-  // formGroupCreateOrderDescriptions() {
-  //   this.formCreateOrderDescription = this.fb.group({
-  //     mechanic: [''] // Campo de formulario para el mecánico (ejemplo)
-  //   });
-  // }
+  formGroupEditOrder() {
+    let startDate = {}
+    let endDate = {}
+
+    const dateSart = this.editOrder !== undefined ? this.editOrder.startDate : null;
+    const dateEnd = this.editOrder !== undefined ? this.editOrder.endDate : null;
+
+    if (dateSart !== null && dateSart !== undefined) {
+      const fecha = new Date(dateSart.toString());
+      console.log(this.editOrder.statusOrder);
+      startDate = { year: fecha.getFullYear(), month: fecha.getMonth() + 1, day: fecha.getDate() }
+    }
+
+    if (dateEnd !== null && dateEnd !== undefined) {
+      const fecha = new Date(dateEnd.toString());
+      endDate = { year: fecha.getFullYear(), month: fecha.getMonth() + 1, day: fecha.getDate() }
+    }
+
+
+
+    this.formEditOrder = this.fb.group({
+      statusOrder: [this.editOrder !== undefined ? this.editOrder.statusOrder : ''],
+      estimatedCost: [{ value: this.editOrder !== undefined ? this.editOrder.estimatedCost : '', disabled: false }, Validators.required],
+      realCost: [0],
+      startDate: [startDate, Validators.required],
+      endDate: [endDate, Validators.required],
+      comments: [{ value: this.editOrder !== undefined ? this.editOrder.comments : '', disabled: false }],
+    });
+  }
+
 
   onFileSelected(event: Event): void {
     const target = event.target as HTMLInputElement;
@@ -551,8 +697,6 @@ export default class WorkOrderComponent {
       phone: this.formCreateCustomer.get('phone')?.value,
     }
 
-    console.log(this.newCustomer);
-
     this.customerservice.createCustomer(this.newCustomer).subscribe({
       next: data => {
         console.log(data);
@@ -567,6 +711,48 @@ export default class WorkOrderComponent {
         this.irAlSegundoTab(1)
         this.selectedImage = null;
         this.createCustomerFlag = true;
+        this.existVehicle = false
+        this.loadAllVehicle()
+        this.allVehicle = this.allVehicle.filter(vehicle => vehicle.customer.userName === this.newCustomer.userName);
+        this.buttonEditUser = false;
+        this.selectedCustomerEdit = true;
+        this.formGroupEditCustomer()
+      }
+    });
+  }
+
+  editCustomer() {
+    this.newCustomer = {
+      userName: this.formEditCustomer.get('document')?.value,
+      name: this.formEditCustomer.get('name')?.value,
+      lastName: this.formEditCustomer.get('lastName')?.value,
+      email: this.formEditCustomer.get('email')?.value,
+      documentNumber: this.formEditCustomer.get('document')?.value,
+      gender: this.formEditCustomer.get('gender')?.value,
+      address: this.formEditCustomer.get('address')?.value,
+      phone: this.formEditCustomer.get('phone')?.value,
+    }
+
+    this.customerservice.updateUser(this.newCustomer).subscribe({
+      next: data => {
+        console.log(data);
+        this.selectedCustomer = false;
+        this.messageService.add({ severity: 'success', summary: 'Confirmación', detail: `${data.message}` });
+        this.formGroupEditCustomer()
+      },
+      error: error => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: `${error.error.message}` });
+      },
+      complete: () => {
+        this.irAlSegundoTab(1)
+        this.selectedImage = null;
+        this.createCustomerFlag = true;
+        this.existVehicle = false
+        this.loadAllVehicle()
+        this.allVehicle = this.allVehicle.filter(vehicle => vehicle.customer.userName === this.newCustomer.userName);
+        this.buttonEditUser = false;
+        this.selectedCustomerEdit = true;
+        this.formGroupEditCustomer()
       }
     });
   }
@@ -588,8 +774,31 @@ export default class WorkOrderComponent {
     }
     console.log(this.newVihicle);
 
+
     this.irAlSegundoTab(2)
-    this.createVehicleFlag = true;
+    // this.createVehicleFlag = true;
+  }
+
+  updateVehicle() {
+    const date = this.formEditVehicle.get('nextMaintenanceDate')?.value
+    this.selectedVehicle = false;
+    this.newVihicle = {
+      plate: this.formEditVehicle.get('plate')?.value,
+      brand: this.formEditVehicle.get('brand')?.value,
+      color: this.formEditVehicle.get('color')?.value,
+      city: this.formEditVehicle.get('city')?.value,
+      model: this.formEditVehicle.get('model')?.value,
+      nextMaintenanceDate: date !== null && date !== undefined ? new Date(date.year, date.month - 1, date.day) : '',
+      status: this.formEditVehicle.get('status')?.value,
+      typeVehicle: this.formEditVehicle.get('typeVehicle')?.value,
+      typeFuels: this.formEditVehicle.get('typeFuels')?.value,
+      customer: this.newCustomer
+    }
+    console.log(this.newVihicle);
+
+
+    this.irAlSegundoTab(2)
+    // this.createVehicleFlag = true;
   }
 
   createOrder() {
@@ -606,21 +815,39 @@ export default class WorkOrderComponent {
       workDescription: [],
       vehicle: this.newVihicle,
     }
-    console.log(this.newOrder);
 
     this.irAlSegundoTab(3)
-    // this.createVehicleFlag = true;
+  }
+
+  editeOrder() {
+    const startDate = this.formEditOrder.get('startDate')?.value
+    const endDate = this.formEditOrder.get('endDate')?.value
+    // this.selectedVehicle = false;
+    this.editOrder = {
+      idOrder: this.editOrder.idOrder,
+      statusOrder: this.formEditOrder.get('statusOrder')?.value,
+      estimatedCost: this.formEditOrder.get('estimatedCost')?.value,
+      realCost: this.formEditOrder.get('realCost')?.value,
+      startDate: startDate !== null && startDate !== undefined ? new Date(startDate.year, startDate.month - 1, startDate.day) : '',
+      endDate: endDate !== null && endDate !== undefined ? new Date(endDate.year, endDate.month - 1, endDate.day) : '',
+      comments: this.formEditOrder.get('comments')?.value,
+      workDescription: this.editOrder.workDescription,
+      vehicle: this.newVihicle,
+    }
+    console.log(this.editOrder.workDescription);
+    console.log(this.selectedProducts);
+   
+     this.editOrder.workDescription?.forEach(prod => {
+      this.selectedProducts?.push({ idWork: prod.idWork, typeWork: prod.typeWork, coste: prod.coste, mechanic: prod.mechanic })
+    });
+    // console.log(this.selectedProductsEdit);
+    this.irAlSegundoTab(3)
   }
 
 
-  createOrderDetail() {
-
-    console.log(this.selectedProducts);
+  createOrderDetail() {  
 
     this.newOrder.workDescription = this.selectedProducts
-
-    console.log(this.newOrder);
-
 
     this.workOrderService.createWorkOrder(this.newOrder).subscribe(
       {
@@ -639,6 +866,40 @@ export default class WorkOrderComponent {
           this.formCreateVehicle.reset();
           this.formCreateOrder.reset();
           this.formCreateOrderDescription.reset();
+          this.irAlSegundoTab(0)
+          this.addProductanddelete()
+        }
+      }
+    )
+  }
+
+  editOrderDetail() {
+    console.log(this.selectedProducts);
+    this.editOrder.workDescription = this.selectedProducts
+
+    console.log(this.selectedProducts);
+    console.log(this.editOrder);
+
+
+    this.workOrderService.updateWorkOrder(this.editOrder).subscribe(
+      {
+        next: data => {
+          console.log(data);
+
+          this.messageService.add({ severity: 'success', summary: 'Confirmación', detail: `${data.message}`, });
+          this.getWorkOrder();
+        },
+        error: error => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: `${error.error.message}` });
+        },
+        complete: () => {
+          this.visibleModalEdit = false;
+          this.formEditCustomer.reset();
+          this.formEditVehicle.reset();
+          this.formEditOrder.reset();
+          this.formCreateOrderDescription.reset();
+          this.irAlSegundoTab(0)
+          this.addProductanddelete()
         }
       }
     )
@@ -670,6 +931,14 @@ export default class WorkOrderComponent {
     this.visibleModalEdit = true;
     this.formGroupEditCustomer()
     this.formGroupEditVehicle()
+    this.formGroupEditOrder();
+    this.selectedVehicleEdit = true;
+    this.existVehicle = true;
+    this.editOrder.workDescription?.forEach(description => this.selectedProducts?.push({ idWork: 1, typeWork: description.typeWork, coste: description.coste }));
+    this.editOrder.workDescription?.forEach(description => {
+      this.availableProducts = this.availableProducts?.filter(product => product.typeWork !== description.typeWork);
+    });
+     this.selectedProducts = [];
   }
 
 
@@ -683,10 +952,15 @@ export default class WorkOrderComponent {
 
   closeDialogCreate() {
     this.visibleModalCreate = false;
+    this.loadAllVehicle()
   }
 
   closeDialogEdit() {
     this.visibleModalEdit = false;
+    // this.selectedVehicleEdit = true;
+    this.existVehicle = false;
+    this.buttonCreateVehicleEdit = true
+    // this.formGroupEditVehicle()
   }
 
   delay(ms: number) {

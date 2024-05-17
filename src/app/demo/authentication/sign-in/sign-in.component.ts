@@ -24,50 +24,48 @@ export default class SignInComponent {
     this.user = new User();
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.isAuthenticate()
-    this.form()    
+    this.form()
   }
 
-  form(){
+  form() {
     this.formLogin = new FormGroup({
       userForm: new FormControl('', [Validators.required]),
       passwordForm: new FormControl('', [Validators.required])
     });
   }
 
-  isAuthenticate(){
-    if(this.authService.isAuthenticated()){
-      this.router.navigate(['/analytics'])
+  isAuthenticate() {
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/user'])
     }
   }
 
   login(): void {
-    console.log(this.user);
-    this.authService.login(this.user).subscribe(response =>{
-      let payload = JSON.parse(atob(response.access_token.split('.')[1]))
-      console.log(payload);
-      this.authService.saveUser(response.access_token);
-      this.authService.saveToken(response.access_token);
-      let user = this.authService.user;
-      console.log("Bienvenido " + user!.name);     
-      
-      this.router.navigate(['/analytics'])
-    }, err => {
-      if(err.status == 400){
-        this.errorCredential = true
-        console.log("Error de credenciales");
-        (async () => {
-          await this.delay(4000)
-          this.errorCredential = false
-        })()
-      }
-    })
+    if (this.user.userName !== undefined && this.user.userName !== null && this.user.password !== undefined && this.user.password !== null) {
+      this.authService.login(this.user).subscribe(response => {
+        let payload = JSON.parse(atob(response.access_token.split('.')[1]))
+        console.log(payload);
+        this.authService.saveUser(response.access_token);
+        this.authService.saveToken(response.access_token);
+        this.router.navigate(['/user'])
+      }, err => {
+        if (err.status == 400) {
+          this.errorCredential = true
+          console.log("Error de credenciales");
+          (async () => {
+            await this.delay(4000)
+            this.errorCredential = false
+          })()
+        }
+      })
+    }
   }
 
   get userAndPasswordRequired() {
     return (this.formLogin.get('userForm')!.hasError('required') && this.formLogin.get('userForm')!.touched) ||
-           (this.formLogin.get('passwordForm')!.hasError('required') && this.formLogin.get('passwordForm')!.touched)
+      (this.formLogin.get('passwordForm')!.hasError('required') && this.formLogin.get('passwordForm')!.touched)
   }
 
   delay(ms: number) {

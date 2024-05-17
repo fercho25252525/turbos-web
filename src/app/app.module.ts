@@ -44,6 +44,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { DragDropModule } from 'primeng/dragdrop';
+import { TimelineModule } from 'primeng/timeline';
 
 import UserComponent from './demo/management-user/user/user.component';
 import CustomerComponent from './demo/management-user/customer/customer.component';
@@ -52,6 +53,7 @@ import { registerLocaleData } from '@angular/common';
 import ProviderComponent  from './demo/provider/provider.component';
 import InventoryComponent from './demo/inventory/inventory.component';
 import WorkOrderComponent from './demo/work-order/work-order.component';
+import StatusOrderComponent  from './demo/status-order/status-order.component';
 
 registerLocaleData(localeEs);
 @NgModule({
@@ -76,7 +78,8 @@ registerLocaleData(localeEs);
     CustomerComponent,
     ProviderComponent,
     InventoryComponent,
-    WorkOrderComponent
+    WorkOrderComponent,
+    StatusOrderComponent
   ],
   imports: [
     BrowserModule, 
@@ -104,7 +107,8 @@ registerLocaleData(localeEs);
     TabViewModule,
     AutoCompleteModule,
     ColorPickerModule,
-    DragDropModule
+    DragDropModule,
+    TimelineModule
   ],
   providers: [MessageService,ConfirmationService],
   bootstrap: [AppComponent]

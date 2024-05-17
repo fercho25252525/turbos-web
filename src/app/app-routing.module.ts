@@ -11,6 +11,7 @@ import CustomerComponent from './demo/management-user/customer/customer.componen
 import ProviderComponent from './demo/provider/provider.component';
 import InventoryComponent from './demo/inventory/inventory.component';
 import WorkOrderComponent from './demo/work-order/work-order.component';
+import StatusOrderComponent from './demo/status-order/status-order.component';
 
 const routes: Routes = [
   {
@@ -46,7 +47,8 @@ const routes: Routes = [
       },
       {
         path: 'customer',
-        component: CustomerComponent
+        component: CustomerComponent,
+        // canActivate: [SignInComponent]
       }, 
       {
         path: 'provider',
@@ -59,6 +61,10 @@ const routes: Routes = [
       {
         path: 'work-order',
         component: WorkOrderComponent
+      },
+      {
+        path: 'status-order',
+        component: StatusOrderComponent
       },
       {
         path: 'component',

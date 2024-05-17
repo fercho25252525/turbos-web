@@ -77,7 +77,7 @@ export const NavigationItems: NavigationItem[] = [
         id: 'estado',
         title: 'Estado Proceso',
         type: 'item',
-        url: '/analytics',
+        url: '/status-order',
         icon: 'feather icon-home'
       }
     ]
@@ -97,21 +97,21 @@ export const NavigationItems: NavigationItem[] = [
       }
     ]
   },
-  {
-    id: 'pqrs',
-    title: 'PQRS',
-    type: 'group',
-    icon: 'icon-group',
-    children: [
-      {
-        id: 'pqrs',
-        title: 'PQRS',
-        type: 'item',
-        url: '/analytics',
-        icon: 'feather icon-home'
-      }
-    ]
-  },
+  // {
+  //   id: 'pqrs',
+  //   title: 'PQRS',
+  //   type: 'group',
+  //   icon: 'icon-group',
+  //   children: [
+  //     {
+  //       id: 'pqrs',
+  //       title: 'PQRS',
+  //       type: 'item',
+  //       url: '/analytics',
+  //       icon: 'feather icon-home'
+  //     }
+  //   ]
+  // },
   // {
   //   id: 'navigation',
   //   title: 'Navigation',

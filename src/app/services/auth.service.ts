@@ -40,8 +40,6 @@ export class AuthService {
 
   login(user: User):Observable<any>{
     const credentials = btoa('turb0s/tr4ck' + ':' + '/Turb0ckTr4cks2o2A/')
-    console.log("credentials: Basic " + atob('dHVyYjBz8XRyNGNrOvFUdXJiMGNrVHI0Y2tzMm8yQfE='));
-    console.log("credentials: Basic 2" + atob('dHVyYjBzw7F0cjRjazrDsVR1cmIwY2tUcjRja3MybzJBw7E='));
     
     const httpHeaders = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded',
     'Authorization': 'Basic ' + credentials})
@@ -59,6 +57,8 @@ export class AuthService {
     this._user.lastName = payload.lasName;
     this._user.email = payload.email;
     this._user.userName = payload.user_name;
+    this._user.photo = payload.photo;
+    this._user.gender = payload.gender;
     this._user.roles = payload.authorities;
 
     sessionStorage.setItem('user', JSON.stringify(this._user));
@@ -98,6 +98,6 @@ export class AuthService {
     this._user = null;
     sessionStorage.clear();
     sessionStorage.removeItem('token');
-    sessionStorage.removeItem('usuario');
+    sessionStorage.removeItem('user');
   }
 }

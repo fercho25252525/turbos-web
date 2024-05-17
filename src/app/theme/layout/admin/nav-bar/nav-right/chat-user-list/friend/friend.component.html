@@ -1,20 +1,82 @@
-<div
-  class="media userlist-box ripple"
-  (click)="innerChatToggle(friends)"
-  [attr.data-id]="friends.id"
-  [attr.data-status]="{ online: friends.status, offline: !friends.status }"
-  [attr.data-username]="friends.name"
->
-  <a class="media-left" href="javascript:"
-    ><img class="media-object img-radius" src="{{ friends.photo }}" alt="{{ friends.name }}" />
-    <div class="live-status" *ngIf="friends.new">{{ friends.new }}</div></a
-  >
-  <div class="media-body">
-    <h6 class="chat-header">
-      {{ friends.name
-      }}<small class="d-block" *ngIf="friends.time" [ngClass]="{ 'text-c-green': friends.status, 'text-c-red': !friends.status }">{{
-        friends.time
-      }}</small>
+<div class="media userlist-box ripple" [attr.data-id]="friends.idPqrs" 
+  *ngIf="friends.idPqrs !== undefined && friendId.idPqrs !== undefined"
+  [attr.data-status]="{ online: friends.status, offline: !friends.status }" [attr.data-username]="friends.status">
+  <a class="media-left" href="javascript:"><img class="media-object img-radius" [src]="getImgUser(friends.user)"
+      alt="{{ friends.user.userName }}" />
+    <div class="live-status" *ngIf="friends.view">{{ friends.view }}</div>
+  </a>
+  <div v class="media-body">
+    <h6 class="chat-header" (click)="innerChatToggle()">
+      {{ friends.user.name }} {{ friends.user.lastName }}
+      <small class="d-block" *ngIf="friends.datePqrs"
+        [ngClass]="{ 'text-primary': friends.status, 'text-c-red': !friends.status }">{{
+        friends.typePqrs
+        }}</small>
+      <small class="d-block" *ngIf="friends.datePqrs"
+        [ngClass]="{ 'text-c-green': friends.status, 'text-c-red': !friends.status }">{{
+        friends.status
+        }}</small>
+    </h6>
+    <h6 class="chat-header" (click)="responsePqrs()" *ngIf="flagDescriptionPqrs">
+      {{ friends.description }}
+
+    </h6>
+    <h6 class="chat-header mt-3" (click)="appendPqrs()" *ngIf="flagDescriptionPqrs && friends.view == 1">
+      Responder:
+
+    </h6>
+
+    <h6 class="chat-header mt-3" *ngIf="flagResponsePqrs">
+      <textarea rows="3" cols="25" pInputTextarea [(ngModel)]="responseValue"></textarea>
+      <!-- <button>Enviar</button> -->
+      <p-button type="button" class="float-end" [rounded]="true" label="Enviar" [raised]="true" severity="secondary"
+        (click)="sendResponse()"></p-button>
     </h6>
   </div>
+</div>
+
+
+<div class="media userlist-box ripple" *ngIf="role !== 'ROLE_ADMIN'">
+
+  <form [formGroup]="formAddPqrs" (ngSubmit)="ceatePqrs()" >
+
+    <p-card header="PQRS">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label for="inputGender" class="col-sm-2 col-form-label">Tipo PQRS</label>
+          <div class="col-sm-12">
+            <select class="form-select" formControlName="typePqrs" aria-label="Default select example" id="inputGender">
+              <option value="Petición">Petición</option>
+              <option value="Queja">Queja</option>
+              <option value="Reclamo">Reclamo</option>
+              <option value="Sugerencia">Sugerencia</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-12 mb-3">
+          <label for="inputGender" class="col-sm-2 col-form-label">Prioridad</label>
+          <div class="col-sm-12">
+            <select class="form-select" formControlName="prioriry" aria-label="Default select example" id="inputGender">
+              <option value="Alta">Alta</option>
+              <option value="Media">Media</option>
+              <option value="Baja">Baja</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-12 mb-3">
+          <label for="inputGender" class="col-sm-2 col-form-label">Descripción</label>
+          <div class="col-sm-12">
+            <textarea rows="3" cols="25" formControlName="description" pInputTextarea [(ngModel)]="responseValue"></textarea>
+          </div>
+        </div>
+      </div>
+      <p-button type="submit" class="float-end" [disabled]="formAddPqrs.invalid" [rounded]="true" label="Enviar" [raised]="true"
+      severity="secondary"></p-button>
+      <div class="mt-3"></div>
+    </p-card>
+    
+  </form>
+
 </div>

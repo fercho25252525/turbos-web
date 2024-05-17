@@ -281,7 +281,7 @@ export default class UserComponent implements OnInit {
       gender: this.formEditUser.get('gender')?.value,
       photo: this.formEditUser.get('username')?.value,
       birthDate: birthDateFormat,
-      enabled: this.formEditUser.get('enabled')?.value,
+      enabled: this.formEditUser.get('enabled')?.value, 
       role: this.newRole,
     }
 

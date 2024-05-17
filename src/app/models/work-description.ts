@@ -5,7 +5,7 @@ export class WorkDescription {
     typeWork!: string;
     coste!: number;
     mec?: string
-    mechanic?: User;
+    mechanic?: User | null;
 }
 
 export class WorkDescriptionAdd {

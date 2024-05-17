@@ -1,22 +1,15 @@
 <div class="h-list-header">
-  <h6>{{ chatMessage.name }}</h6>
+  <h6 class="text-dark">{{friendId}}</h6>
   <a href="javascript:" class="h-back-user-list" (click)="this.ChatToggle.emit()"><i class="feather icon-chevron-left"></i></a>
 </div>
 
 <div class="h-list-body">
   <div class="main-chat-cont">
     <div class="main-friend-chat">
-      <ng-template #CHATNOTFOUND>
-        <div class="media chat-messages text-center">
-          <div class="media-body chat-menu-content">
-            <div class="">
-              <p class="chat-cont">CHAT NOT FOUND</p>
-            </div>
-          </div>
-        </div>
-      </ng-template>
-      <ng-container *ngIf="chatMessage.chat; else CHATNOTFOUND">
+      <ng-container >
+        <a href="">asdasdasd</a>
         <ng-scrollbar style="height: calc(100vh - 170px)" visibility="hover">
+          asdasdasd
           <div *ngFor="let messages of chatMessage.chat">
             <div class="media chat-messages">
               <a *ngIf="messages.type" class="media-left photo-table" href="javascript:">
@@ -47,7 +40,7 @@
     </div>
   </div>
 </div>
-<div class="h-list-footer">
+<!-- <div class="h-list-footer">
   <div class="input-group" (focusout)="this.message_error = false">
     <input type="file" class="chat-attach" style="display: none" />
     <a href="javascript:" class="input-group-prepend btn btn-success btn-attach" [ngClass]="{ 'btn-danger': message_error === true }">
@@ -71,4 +64,4 @@
       <i class="feather icon-message-circle"></i>
     </button>
   </div>
-</div>
+</div> -->
